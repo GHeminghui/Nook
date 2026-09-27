@@ -2,7 +2,7 @@
   "project_name": "Nook",
   "project_status": "active",
   "created_at": "2026-09-27",
-  "current_stage": "discovery",
+  "current_stage": "design",
   "stage_order": [
     "discovery",
     "design",
@@ -13,19 +13,19 @@
     "discovery": {
       "name": "调研",
       "dir": "00-discovery",
-      "status": "in_progress",
+      "status": "done",
       "started_at": "2026-09-27",
-      "completed_at": null,
-      "decision": "pending",
+      "completed_at": "2026-09-27",
+      "decision": "go",
       "checklist": [
         {
           "item": "完成背景、目标用户与竞品调研，输出研究结论",
-          "done": false,
+          "done": true,
           "artifact": "00-discovery/research.md"
         },
         {
           "item": "完成 Go/No-Go 决策记录",
-          "done": false,
+          "done": true,
           "artifact": "00-discovery/decision.md"
         }
       ]
@@ -33,8 +33,8 @@
     "design": {
       "name": "设计",
       "dir": "01-design",
-      "status": "pending",
-      "started_at": null,
+      "status": "in_progress",
+      "started_at": "2026-09-27",
       "completed_at": null,
       "checklist": [
         {
