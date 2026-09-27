@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Nook 架构与流程图</title>
+<style>
+  :root{
+    --bg:#f6f7f9; --card:#ffffff; --ink:#1f2430; --muted:#5b6472;
+    --line:#e3e6eb; --ui:#e8f0fe; --ui-b:#bcd3fb;
+    --svc:#e6f4ea; --svc-b:#bfe3c9;
+    --data:#fef7e0; --data-b:#f3dfa0;
+    --sys:#fce8e6; --sys-b:#f5c3bd;
+    --accent:#3b6cf6;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    line-height:1.6}
+  .wrap{max-width:1000px;margin:0 auto;padding:40px 24px 64px}
+  header{border-bottom:1px solid var(--line);padding-bottom:20px;margin-bottom:28px}
+  h1{font-size:26px;margin:0 0 6px}
+  .sub{color:var(--muted);font-size:14px}
+  h2{font-size:19px;margin:36px 0 12px;padding-left:10px;border-left:4px solid var(--accent)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-top:14px;overflow:auto}
+  svg{display:block;width:100%;height:auto}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:10px;font-size:13px;color:var(--muted)}
+  .dot{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+  .note{font-size:13px;color:var(--muted);margin-top:8px}
+  table{width:100%;border-collapse:collapse;margin-top:12px;font-size:14px}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left}
+  th{background:#fafbfc}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 z" fill="#8a93a3"/>
+    </marker>
+  </defs>
+</svg>
+<div class="wrap">
+  <header>
+    <h1>Nook 架构与流程图</h1>
+    <div class="sub">面向教师的 iPad 本地教学资料库 · v1 设计 · 生成于 2026-09-27</div>
+  </header>
+
+  <h2>1. 系统分层架构</h2>
+  <div class="card">
+    <svg viewBox="0 0 920 430" role="img" aria-label="系统分层架构图">
+      <rect x="40" y="20" width="840" height="80" rx="12" fill="var(--ui)" stroke="var(--ui-b)"/>
+      <text x="60" y="48" font-size="15" font-weight="600" fill="#1f2430">UI 层（SwiftUI）</text>
+      <text x="60" y="76" font-size="13" fill="#41506b">资料库浏览 · 文件夹树 · 标签管理 · 搜索 · 预览</text>
+
+      <rect x="40" y="118" width="840" height="80" rx="12" fill="var(--svc)" stroke="var(--svc-b)"/>
+      <text x="60" y="146" font-size="15" font-weight="600" fill="#1f2430">领域服务层</text>
+      <text x="60" y="174" font-size="13" fill="#3d5b46">LibraryStore · Indexer · Preview · Output · Sync</text>
+
+      <rect x="40" y="216" width="840" height="80" rx="12" fill="var(--data)" stroke="var(--data-b)"/>
+      <text x="60" y="244" font-size="15" font-weight="600" fill="#1f2430">数据 / 持久层</text>
+      <text x="60" y="272" font-size="13" fill="#6b5a1e">SwiftData 元数据 · 文件系统真实目录 · SQLite FTS5 全文索引</text>
+
+      <rect x="40" y="314" width="840" height="90" rx="12" fill="var(--sys)" stroke="var(--sys-b)"/>
+      <text x="60" y="342" font-size="15" font-weight="600" fill="#1f2430">系统能力层</text>
+      <text x="60" y="370" font-size="13" fill="#6b3b36">PDFKit · WKWebView · QuickLook · UIActivityViewController（分享）</text>
+      <text x="60" y="390" font-size="13" fill="#6b3b36">UIPrintInteractionController（打印）· iCloud Documents · Share Extension</text>
+    </svg>
+    <div class="legend">
+      <span><span class="dot" style="background:var(--ui)"></span>界面</span>
+      <span><span class="dot" style="background:var(--svc)"></span>服务</span>
+      <span><span class="dot" style="background:var(--data)"></span>数据</span>
+      <span><span class="dot" style="background:var(--sys)"></span>系统能力</span>
+    </div>
+  </div>
+
+  <h2>2. 数据模型（真实文件夹 + 标签）</h2>
+  <div class="card">
+    <svg viewBox="0 0 920 360" role="img" aria-label="数据模型关系图">
+      <rect x="40" y="50" width="210" height="96" rx="10" fill="#eef3ff" stroke="#bcd3fb"/>
+      <text x="60" y="78" font-size="15" font-weight="600">Folder 文件夹</text>
+      <text x="60" y="102" font-size="12" fill="#5b6472">id · name · parentId</text>
+      <text x="60" y="122" font-size="12" fill="#5b6472">sortOrder · createdAt</text>
+
+      <rect x="355" y="50" width="210" height="96" rx="10" fill="#eef3ff" stroke="#bcd3fb"/>
+      <text x="375" y="78" font-size="15" font-weight="600">Item 资料</text>
+      <text x="375" y="102" font-size="12" fill="#5b6472">id · folderId · fileName</text>
+      <text x="375" y="122" font-size="12" fill="#5b6472">type · path · indexState</text>
+
+      <rect x="670" y="50" width="210" height="96" rx="10" fill="#f0fbf3" stroke="#bfe3c9"/>
+      <text x="690" y="78" font-size="15" font-weight="600">Tag 标签</text>
+      <text x="690" y="102" font-size="12" fill="#5b6472">id · name · color</text>
+
+      <rect x="355" y="240" width="210" height="80" rx="10" fill="#fff7e6" stroke="#f3dfa0"/>
+      <text x="375" y="272" font-size="15" font-weight="600">ItemTag</text>
+      <text x="375" y="296" font-size="12" fill="#5b6472">itemId · tagId</text>
+
+      <line x1="250" y1="98" x2="355" y2="98" stroke="#8a93a3" stroke-width="1.5" marker-end="url(#arrow)"/>
+      <text x="272" y="90" font-size="12" fill="#5b6472">1 ─ *</text>
+
+      <line x1="460" y1="146" x2="460" y2="240" stroke="#8a93a3" stroke-width="1.5" marker-end="url(#arrow)"/>
+      <text x="470" y="200" font-size="12" fill="#5b6472">1 ─ *</text>
+
+      <line x1="670" y1="98" x2="565" y2="240" stroke="#8a93a3" stroke-width="1.5" marker-end="url(#arrow)" opacity="0.9"/>
+      <text x="628" y="200" font-size="12" fill="#5b6472">1 ─ *</text>
+
+      <path d="M60,50 C20,20 20,130 60,146" fill="none" stroke="#8a93a3" stroke-width="1.5" marker-end="url(#arrow)"/>
+      <text x="6" y="105" font-size="12" fill="#5b6472">子文件夹</text>
+    </svg>
+    <div class="note">文件实体在磁盘上按 <b>真实目录</b> 存放；标签是叠加的多维属性，一份资料可有多个标签。</div>
+  </div>
+
+  <h2>3. 关键流程 · 收资料</h2>
+  <div class="card">
+    <svg viewBox="0 0 920 150" role="img" aria-label="收资料流程">
+      <g font-size="13" text-anchor="middle">
+        <rect x="20" y="46" width="130" height="58" rx="9" fill="#eef3ff" stroke="#bcd3fb"/>
+        <text x="85" y="72">选取来源</text><text x="85" y="90" font-size="11" fill="#5b6472">文件 / 分享</text>
+
+        <rect x="170" y="46" width="130" height="58" rx="9" fill="#eef3ff" stroke="#bcd3fb"/>
+        <text x="235" y="80">选文件夹</text>
+
+        <rect x="320" y="46" width="130" height="58" rx="9" fill="#eef3ff" stroke="#bcd3fb"/>
+        <text x="385" y="80">打标签</text>
+
+        <rect x="470" y="46" width="150" height="58" rx="9" fill="#e6f4ea" stroke="#bfe3c9"/>
+        <text x="545" y="72">落盘 + 入库</text><text x="545" y="90" font-size="11" fill="#5b6472">文件 + 元数据</text>
+
+        <rect x="640" y="46" width="130" height="58" rx="9" fill="#e6f4ea" stroke="#bfe3c9"/>
+        <text x="705" y="80">建全文索引</text>
+
+        <rect x="790" y="46" width="110" height="58" rx="9" fill="#f0fbf3" stroke="#bfe3c9"/>
+        <text x="845" y="80">完成</text>
+      </g>
+      <g stroke="#8a93a3" stroke-width="1.5" marker-end="url(#arrow)">
+        <line x1="150" y1="75" x2="170" y2="75"/>
+        <line x1="300" y1="75" x2="320" y2="75"/>
+        <line x1="450" y1="75" x2="470" y2="75"/>
+        <line x1="620" y1="75" x2="640" y2="75"/>
+        <line x1="770" y1="75" x2="790" y2="75"/>
+      </g>
+    </svg>
+  </div>
+
+  <h2>4. 关键流程 · 找资料</h2>
+  <div class="card">
+    <svg viewBox="0 0 920 150" role="img" aria-label="找资料流程">
+      <g font-size="13" text-anchor="middle">
+        <rect x="20" y="46" width="140" height="58" rx="9" fill="#eef3ff" stroke="#bcd3fb"/>
+        <text x="90" y="72">关键词 / 标签</text><text x="90" y="90" font-size="11" fill="#5b6472">输入条件</text>
+
+        <rect x="180" y="46" width="130" height="58" rx="9" fill="#e6f4ea" stroke="#bfe3c9"/>
+        <text x="245" y="72">FTS 全文</text><text x="245" y="90" font-size="11" fill="#5b6472">候选集合</text>
+
+        <rect x="330" y="46" width="140" height="58" rx="9" fill="#e6f4ea" stroke="#bfe3c9"/>
+        <text x="400" y="80">文件夹范围过滤</text>
+
+        <rect x="490" y="46" width="130" height="58" rx="9" fill="#e6f4ea" stroke="#bfe3c9"/>
+        <text x="555" y="80">标签过滤</text>
+
+        <rect x="640" y="46" width="130" height="58" rx="9" fill="#eef3ff" stroke="#bcd3fb"/>
+        <text x="705" y="80">结果列表</text>
+
+        <rect x="790" y="46" width="110" height="58" rx="9" fill="#f0fbf3" stroke="#bfe3c9"/>
+        <text x="845" y="80">预览</text>
+      </g>
+      <g stroke="#8a93a3" stroke-width="1.5" marker-end="url(#arrow)">
+        <line x1="160" y1="75" x2="180" y2="75"/>
+        <line x1="310" y1="75" x2="330" y2="75"/>
+        <line x1="470" y1="75" x2="490" y2="75"/>
+        <line x1="620" y1="75" x2="640" y2="75"/>
+        <line x1="770" y1="75" x2="790" y2="75"/>
+      </g>
+    </svg>
+    <div class="note">全文候选先由 FTS5 产生，再按「文件夹范围 + 标签」逐层过滤，最后排序返回并高亮关键词。</div>
+  </div>
+
+  <h2>5. 模块职责</h2>
+  <div class="card">
+    <table>
+      <thead><tr><th>模块</th><th>职责</th><th>依赖</th></tr></thead>
+      <tbody>
+        <tr><td>LibraryStore</td><td>Folder / Item / Tag 增删改查、磁盘 I/O、命名去重</td><td>SwiftData、FileManager</td></tr>
+        <tr><td>Indexer</td><td>文本抽取、FTS5 索引维护、检索查询</td><td>PDFKit、SQLite</td></tr>
+        <tr><td>Preview</td><td>PDF / 图片 / HTML / 其他 渲染</td><td>PDFKit、WKWebView、QuickLook</td></tr>
+        <tr><td>Output</td><td>系统分享面板、打印</td><td>UIActivityViewController、UIPrintInteractionController</td></tr>
+        <tr><td>Sync</td><td>iCloud 容器接入与同步状态</td><td>iCloud Documents</td></tr>
+        <tr><td>ShareExtension</td><td>外部"存入 Nook"入口</td><td>共享容器</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+</body>
+</html>

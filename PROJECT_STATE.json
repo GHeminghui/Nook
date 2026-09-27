@@ -2,7 +2,7 @@
   "project_name": "Nook",
   "project_status": "active",
   "created_at": "2026-09-27",
-  "current_stage": "design",
+  "current_stage": "development",
   "stage_order": [
     "discovery",
     "design",
@@ -33,23 +33,23 @@
     "design": {
       "name": "设计",
       "dir": "01-design",
-      "status": "in_progress",
+      "status": "done",
       "started_at": "2026-09-27",
-      "completed_at": null,
+      "completed_at": "2026-09-27",
       "checklist": [
         {
           "item": "输出产品规格 product-spec.md",
-          "done": false,
+          "done": true,
           "artifact": "01-design/product-spec.md"
         },
         {
           "item": "输出技术方案 tech-design.md",
-          "done": false,
+          "done": true,
           "artifact": "01-design/tech-design.md"
         },
         {
           "item": "完成架构图/流程图",
-          "done": false,
+          "done": true,
           "artifact": "01-design/architecture.html"
         }
       ]
@@ -57,8 +57,8 @@
     "development": {
       "name": "开发",
       "dir": "02-development",
-      "status": "pending",
-      "started_at": null,
+      "status": "in_progress",
+      "started_at": "2026-09-27",
       "completed_at": null,
       "checklist": [
         {
