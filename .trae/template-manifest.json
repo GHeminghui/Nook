@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "template_name": "project-workflow-template",
+  "template_version": "0.7.3",
+  "files": [
+    {
+      "path": ".gitignore",
+      "sha256": "598fef62e7c02d256abf4b9b72415ab982a1862163d5a5e850fdb5369cb2c1a5"
+    },
+    {
+      "path": ".trae/commands/advance.md",
+      "sha256": "028870766d84f48b16b81760e561e24462bd3ae57bcd6fc6dfcb79b626934df5"
+    },
+    {
+      "path": ".trae/commands/init-project.md",
+      "sha256": "4278ef2492de5e62e4aef6b4c435ea99734841bcd3a16658208c76cbed47e754"
+    },
+    {
+      "path": ".trae/commands/status.md",
+      "sha256": "bb078d3e9618dca6de1b8eb8fbf6bd5129b612505b9c49cd20694ca3ad6da3a8"
+    },
+    {
+      "path": ".trae/commands/upgrade.md",
+      "sha256": "1041907e3a96aeba1372f86e70bc9b546dff638e01fd9963fd2baab4404a768b"
+    },
+    {
+      "path": ".trae/hooks.json",
+      "sha256": "5e6a2bb4c16e7ca3223c0c5010e907a7206897e72086a44dbf0759b49ba313ba"
+    },
+    {
+      "path": ".trae/scripts/inject_status.py",
+      "sha256": "9cc70c617c75bdb87428177299586cf0174df92c103581f34dee43b6712eaeae"
+    },
+    {
+      "path": "00-discovery/README.md",
+      "sha256": "d9146bddcc3a544441d221844ba5fda8612141debc956f0af07682ede55093a4"
+    },
+    {
+      "path": "01-design/README.md",
+      "sha256": "65b9975f72e7b629a03188c775b7d387f0e30b12cee3735afeb6b0eb86234975"
+    },
+    {
+      "path": "02-development/README.md",
+      "sha256": "3798da2a49bb41448c64af692f1d229ca5f6879588dfac8ae188b2a9ef53d0d0"
+    },
+    {
+      "path": "03-operations/README.md",
+      "sha256": "c7ed702cd2283fa9f4aed55f2bcbd9b50a26ef8d5a5afeaf4a564ccb32937062"
+    },
+    {
+      "path": "AGENTS.md",
+      "sha256": "6911cdbf795c4c124155e209fad7b91ab673bc09ddf1cc8dd8ed21322426d936"
+    },
+    {
+      "path": "PROJECT_STATE.json",
+      "sha256": "fb14b4ddd7881719873a32cfec17da378da623e0f4d7efdfe03e070b21f552fc",
+      "mode": "create-only"
+    },
+    {
+      "path": "README.md",
+      "sha256": "ebc726b67d3a1c3e94c0aa857eab677a4fabb117b61d973a5ffd1b5f31557f9e"
+    },
+    {
+      "path": "docs/README.md",
+      "sha256": "6ee435109c00bd05049ab8601c41ea0bb77d9b695b0f65a3942e110082b0968c"
+    },
+    {
+      "path": "docs/adr/000-template.md",
+      "sha256": "f36377eb87769059d4355840a68f409a9b06403b838afc43998996757c087625"
+    }
+  ]
+}

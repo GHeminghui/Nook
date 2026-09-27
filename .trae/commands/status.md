@@ -1,0 +1,18 @@
+---
+description: 查看项目当前阶段、进度与下一步动作
+---
+
+请读取项目根目录的 `PROJECT_STATE.json`，并以清晰的形式向用户展示：
+
+1. **总览**：项目名称、项目状态（`active` 进行中 / `rejected` 已否决 / `archived` 已归档）、当前阶段（含序号，如 2/4）、整体进度（各阶段完成情况）
+2. **当前阶段详情**：阶段名、状态、开始时间、本阶段 checklist（用 `[x]` / `[ ]` 标注完成情况）
+3. **下一步动作**：取当前阶段**第一个未完成**的 checklist 项；若本阶段已全部完成，则提示运行 `/advance`
+4. **已完成交付物**：汇总各阶段中已勾选项对应的 `artifact` 路径
+
+补充说明：
+
+- 第 3、4 条均由 `checklist` **派生**，状态文件里没有 `next_action` 与 `deliverables` 字段，不要去找它们。
+- 若当前阶段是 `discovery`，额外展示 `discovery.decision`（`pending` 未判定 / `go` / `no-go`）——它是「项目是否继续」的判定依据，与 `project_status` 相互印证。
+- 列出 checklist 时，若某项已勾选但其 `artifact` 路径不存在，请标注出来（如 `[x] ⚠ 产物缺失`）。
+- **若 `project_status` 不是 `active`**：明确提示用户流程已终止（已否决或已归档），不要给出推进建议。
+- 若 `PROJECT_STATE.json` 不存在，提示用户先运行 `/init-project`。
