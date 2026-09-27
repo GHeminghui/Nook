@@ -17,5 +17,11 @@ __pycache__/
 .idea/
 .vscode/
 
+# Xcode
+xcuserdata/
+*.xcuserstate
+DerivedData/
+build/
+
 # 保留 TRAE 配置（参与版本管理）
 !.trae/
