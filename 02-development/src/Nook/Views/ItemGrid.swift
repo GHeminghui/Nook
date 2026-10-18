@@ -8,6 +8,19 @@ struct ItemGrid: View {
     let folderScope: Folder?
 
     @State private var pendingDelete: Item?
+    @State private var activeAction: ItemAction?
+
+    private enum ItemAction: Identifiable {
+        case tags(Item)
+        case move(Item)
+
+        var id: String {
+            switch self {
+            case .tags(let item): return "tags-\(item.id)"
+            case .move(let item): return "move-\(item.id)"
+            }
+        }
+    }
 
     private var filteredItems: [Item] {
         var effective = criteria
@@ -41,12 +54,18 @@ struct ItemGrid: View {
                     LazyVGrid(columns: columns, spacing: 16) {
                         ForEach(filteredItems) { item in
                             NavigationLink {
-                                PreviewContainer(item: item, url: store.absoluteURL(for: item))
+                                PreviewContainer(item: item, store: store)
                             } label: {
                                 ItemCell(item: item)
                             }
                             .buttonStyle(.plain)
                             .contextMenu {
+                                Button("编辑标签", systemImage: "tag") {
+                                    activeAction = .tags(item)
+                                }
+                                Button("移动到…", systemImage: "folder") {
+                                    activeAction = .move(item)
+                                }
                                 Button("删除", systemImage: "trash", role: .destructive) {
                                     pendingDelete = item
                                 }
@@ -70,6 +89,14 @@ struct ItemGrid: View {
             Button("取消", role: .cancel) { pendingDelete = nil }
         } message: {
             Text("文件会同时从磁盘移除，操作不可撤销。")
+        }
+        .sheet(item: $activeAction) { action in
+            switch action {
+            case .tags(let item):
+                ItemTagEditor(store: store, item: item)
+            case .move(let item):
+                MoveItemSheet(store: store, item: item)
+            }
         }
     }
 }

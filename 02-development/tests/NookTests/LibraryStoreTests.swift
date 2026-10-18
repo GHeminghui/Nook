@@ -48,5 +48,24 @@ import Foundation
         let tag = try store.createTag(named: "易错")
         try store.addTag(tag, to: item)
         #expect(item.tags.contains { $0.id == tag.id })
+
+        try store.removeTag(tag, from: item)
+        #expect(item.tags.isEmpty)
+    }
+
+    @Test func movingItemUpdatesDiskAndFolder() throws {
+        let math = try store.createFolder(named: "数学", parent: nil)
+        let chinese = try store.createFolder(named: "语文", parent: nil)
+        let src = FileManager.default.temporaryDirectory.appendingPathComponent("习题.pdf")
+        try Data("x".utf8).write(to: src)
+        let item = try store.importFile(at: src, into: math)
+        let oldURL = store.absoluteURL(for: item)
+
+        try store.moveItem(item, to: chinese)
+
+        #expect(item.folder?.id == chinese.id)
+        #expect(!FileManager.default.fileExists(atPath: oldURL.path))
+        #expect(FileManager.default.fileExists(atPath: store.absoluteURL(for: item).path))
+        #expect(store.absoluteURL(for: item).deletingLastPathComponent().lastPathComponent == "语文")
     }
 }

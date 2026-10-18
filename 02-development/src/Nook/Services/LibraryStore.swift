@@ -134,6 +134,34 @@ final class LibraryStore {
         try context.save()
     }
 
+    func moveItem(_ item: Item, to folder: Folder?) throws {
+        let sourceURL = absoluteURL(for: item)
+        let destDir = folder.map { folderURL(for: $0) } ?? rootURL
+        try fm.createDirectory(at: destDir, withIntermediateDirectories: true)
+
+        let sameDirectory = sourceURL.deletingLastPathComponent().standardizedFileURL
+            == destDir.standardizedFileURL
+        if sameDirectory {
+            item.folder = folder
+            try context.save()
+            return
+        }
+
+        let existing = Set((try? fm.contentsOfDirectory(atPath: destDir.path)) ?? [])
+        let fileName = NameDeduper.uniqueName(item.fileName, existing: existing)
+        let destURL = destDir.appendingPathComponent(fileName)
+
+        if fm.fileExists(atPath: sourceURL.path) {
+            try fm.moveItem(at: sourceURL, to: destURL)
+        }
+
+        item.fileName = fileName
+        item.relativePath = relativePath(of: destURL)
+        item.folder = folder
+        item.modifiedAt = Date()
+        try context.save()
+    }
+
     func absoluteURL(for item: Item) -> URL {
         rootURL.appendingPathComponent(item.relativePath)
     }

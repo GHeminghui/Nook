@@ -2,9 +2,13 @@ import SwiftUI
 
 struct PreviewContainer: View {
     let item: Item
-    let url: URL
+    let store: LibraryStore
+
+    private var url: URL { store.absoluteURL(for: item) }
 
     @State private var showingShare = false
+    @State private var showingTags = false
+    @State private var showingMove = false
 
     var body: some View {
         Group {
@@ -19,6 +23,12 @@ struct PreviewContainer: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItemGroup(placement: .topBarTrailing) {
+                Menu {
+                    Button("编辑标签", systemImage: "tag") { showingTags = true }
+                    Button("移动到…", systemImage: "folder") { showingMove = true }
+                } label: {
+                    Label("更多", systemImage: "ellipsis.circle")
+                }
                 Button {
                     showingShare = true
                 } label: {
@@ -33,6 +43,12 @@ struct PreviewContainer: View {
         }
         .sheet(isPresented: $showingShare) {
             ShareSheet(items: [url])
+        }
+        .sheet(isPresented: $showingTags) {
+            ItemTagEditor(store: store, item: item)
+        }
+        .sheet(isPresented: $showingMove) {
+            MoveItemSheet(store: store, item: item)
         }
         .overlay(alignment: .bottom) {
             if item.kind == .html {
