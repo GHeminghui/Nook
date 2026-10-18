@@ -1,23 +1,17 @@
-//
-//  NookApp.swift
-//  Nook
-//
-//  Created by 何明辉 on 2026/9/27.
-//
-
 import SwiftUI
 import SwiftData
 
 @main
 struct NookApp: App {
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Item.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
+    private let container: ModelContainer = {
+        let schema = Schema([Folder.self, Item.self, Tag.self])
+        let configuration = ModelConfiguration(
+            schema: schema,
+            isStoredInMemoryOnly: false,
+            cloudKitDatabase: .none
+        )
         do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
+            return try ModelContainer(for: schema, configurations: [configuration])
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
         }
@@ -25,8 +19,8 @@ struct NookApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            LibraryView()
         }
-        .modelContainer(sharedModelContainer)
+        .modelContainer(container)
     }
 }
