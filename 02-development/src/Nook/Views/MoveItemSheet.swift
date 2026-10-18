@@ -22,7 +22,7 @@ struct MoveItemSheet: View {
                     Button {
                         selection = nil
                     } label: {
-                        row("资料库根目录", systemImage: "tray.full", isSelected: selection == nil)
+                        row("顶层", systemImage: "tray.full", isSelected: selection == nil)
                     }
                     .buttonStyle(.plain)
                 }

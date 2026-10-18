@@ -2,13 +2,18 @@ import SwiftUI
 import SwiftData
 
 struct ItemGrid: View {
-    @Query(sort: \Item.importedAt, order: .reverse) private var items: [Item]
+    @Query(sort: [SortDescriptor(\Item.sortOrder), SortDescriptor(\Item.importedAt, order: .reverse)])
+    private var items: [Item]
+    @Query(sort: [SortDescriptor(\Folder.sortOrder), SortDescriptor(\Folder.name)])
+    private var folders: [Folder]
     let store: LibraryStore
     let criteria: SearchService.Criteria
     let folderScope: Folder?
+    let onOpenFolder: (Folder) -> Void
 
     @State private var pendingDelete: Item?
     @State private var activeAction: ItemAction?
+    @State private var targetedItemID: UUID?
 
     private enum ItemAction: Identifiable {
         case tags(Item)
@@ -20,6 +25,20 @@ struct ItemGrid: View {
             case .move(let item): return "move-\(item.id)"
             }
         }
+    }
+
+    private var isFiltering: Bool {
+        !criteria.text.isEmpty || !criteria.tagIDs.isEmpty
+    }
+
+    private var childFolders: [Folder] {
+        guard let folderScope else { return [] }
+        return folders
+            .filter { $0.parent?.id == folderScope.id }
+            .sorted { lhs, rhs in
+                if lhs.sortOrder != rhs.sortOrder { return lhs.sortOrder < rhs.sortOrder }
+                return lhs.name < rhs.name
+            }
     }
 
     private var filteredItems: [Item] {
@@ -43,22 +62,53 @@ struct ItemGrid: View {
 
     var body: some View {
         Group {
-            if filteredItems.isEmpty {
+            if filteredItems.isEmpty && (isFiltering || childFolders.isEmpty) {
                 ContentUnavailableView(
-                    criteria.text.isEmpty && criteria.tagIDs.isEmpty ? "还没有资料" : "没有匹配的资料",
+                    isFiltering ? "没有匹配的资料" : "还没有资料",
                     systemImage: "doc.text.magnifyingglass",
-                    description: Text(criteria.text.isEmpty ? "点右上角「导入」添加资料" : "换个关键词或标签试试")
+                    description: Text(isFiltering ? "换个关键词或标签试试" : "点右上角「导入」添加资料")
                 )
             } else {
                 ScrollView {
                     LazyVGrid(columns: columns, spacing: 16) {
+                        if !isFiltering {
+                            ForEach(childFolders) { folder in
+                                Button {
+                                    onOpenFolder(folder)
+                                } label: {
+                                    FolderCell(folder: folder)
+                                }
+                                .buttonStyle(.plain)
+                            }
+                        }
+
                         ForEach(filteredItems) { item in
-                            NavigationLink {
-                                PreviewContainer(item: item, store: store)
-                            } label: {
-                                ItemCell(item: item)
+                            Group {
+                                if item.kind == .pdf {
+                                    Button {
+                                        openInQuickLook(item)
+                                    } label: {
+                                        itemLabel(item)
+                                    }
+                                } else {
+                                    NavigationLink {
+                                        PreviewContainer(item: item, store: store)
+                                    } label: {
+                                        itemLabel(item)
+                                    }
+                                }
                             }
                             .buttonStyle(.plain)
+                            .draggable(DragPayload.item(item.id))
+                            .dropDestination(for: String.self) { payloads, _ in
+                                handleItemDrop(payloads, on: item)
+                            } isTargeted: { targeted in
+                                if targeted {
+                                    targetedItemID = item.id
+                                } else if targetedItemID == item.id {
+                                    targetedItemID = nil
+                                }
+                            }
                             .contextMenu {
                                 Button("编辑标签", systemImage: "tag") {
                                     activeAction = .tags(item)
@@ -98,6 +148,51 @@ struct ItemGrid: View {
                 MoveItemSheet(store: store, item: item)
             }
         }
+    }
+
+    private func itemLabel(_ item: Item) -> some View {
+        ItemCell(item: item)
+            .overlay {
+                RoundedRectangle(cornerRadius: 14)
+                    .stroke(
+                        targetedItemID == item.id ? Color.accentColor : .clear,
+                        lineWidth: 2
+                    )
+            }
+    }
+
+    /// PDF 直接用系统 Quick Look 打开，阅读与标注都在系统界面里完成。
+    private func openInQuickLook(_ item: Item) {
+        let destination = store.absoluteURL(for: item)
+        PDFMarkupPresenter.shared.present(url: destination) { editedURL in
+            if editedURL.standardizedFileURL != destination.standardizedFileURL {
+                if let data = try? Data(contentsOf: editedURL) {
+                    try? data.write(to: destination, options: .atomic)
+                }
+            }
+            store.markEdited(item, reindex: false)
+        }
+    }
+
+    private func handleItemDrop(_ payloads: [String], on target: Item) -> Bool {
+        for payload in payloads {
+            guard case .item(let id) = DragPayload.parse(payload), id != target.id else { continue }
+            let descriptor = FetchDescriptor<Item>(predicate: #Predicate { $0.id == id })
+            guard let source = (try? store.context.fetch(descriptor))?.first else { continue }
+
+            if source.folder?.id == target.folder?.id {
+                let siblings = items.filter { $0.folder?.id == target.folder?.id }
+                if let from = siblings.firstIndex(where: { $0.id == source.id }),
+                   let to = siblings.firstIndex(where: { $0.id == target.id }) {
+                    try? store.reorderItem(source, relativeTo: target, placeAfter: from < to)
+                    return true
+                }
+            }
+
+            try? store.reorderItem(source, relativeTo: target)
+            return true
+        }
+        return false
     }
 }
 
@@ -151,6 +246,38 @@ struct ItemCell: View {
         case .image: return "photo"
         case .html: return "globe"
         case .other: return "doc"
+        }
+    }
+}
+
+struct FolderCell: View {
+    let folder: Folder
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            RoundedRectangle(cornerRadius: 10)
+                .fill(Color.accentColor.opacity(0.08))
+                .frame(height: 110)
+                .overlay {
+                    Image(systemName: "folder.fill")
+                        .font(.system(size: 38))
+                        .foregroundStyle(.tint)
+                }
+
+            Text(folder.name)
+                .font(.subheadline)
+                .lineLimit(2)
+                .multilineTextAlignment(.leading)
+
+            Text("\(folder.items.count) 份资料")
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+        }
+        .padding(10)
+        .background(Color(.systemBackground), in: RoundedRectangle(cornerRadius: 14))
+        .overlay {
+            RoundedRectangle(cornerRadius: 14)
+                .stroke(Color(.separator).opacity(0.5), lineWidth: 0.5)
         }
     }
 }

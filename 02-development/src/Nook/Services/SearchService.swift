@@ -24,7 +24,7 @@ enum SearchService {
             let hit = s.fileName.lowercased().contains(q) || s.textContent.lowercased().contains(q)
             if !hit { return false }
         }
-        if let scope = c.folderScope, !s.folderAncestors.contains(scope) { return false }
+        if let scope = c.folderScope, s.folderID != scope { return false }
         if !c.tagIDs.isEmpty {
             let set = Set(s.tagIDs)
             if c.matchAllTags {

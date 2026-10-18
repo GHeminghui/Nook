@@ -1,6 +1,14 @@
 import Foundation
 import SwiftData
 
+enum LibraryStoreError: LocalizedError {
+    case folderNotEmpty
+
+    var errorDescription: String? {
+        "文件夹或其子文件夹内还有文件，无法删除"
+    }
+}
+
 @MainActor
 final class LibraryStore {
     let context: ModelContext
@@ -51,22 +59,124 @@ final class LibraryStore {
     }
 
     func renameFolder(_ folder: Folder, to raw: String) throws {
+        let name = PathSanitizer.sanitize(raw)
+        guard name != folder.name else { return }
+
         let oldURL = folderURL(for: folder)
-        folder.name = PathSanitizer.sanitize(raw)
+        let parentURL = oldURL.deletingLastPathComponent()
+        let existing = Set((try? fm.contentsOfDirectory(atPath: parentURL.path)) ?? [])
+            .subtracting([folder.name])
+        let uniqueName = NameDeduper.uniqueName(name, existing: existing)
+
+        folder.name = uniqueName
         let newURL = folderURL(for: folder)
         if oldURL != newURL, fm.fileExists(atPath: oldURL.path) {
             try fm.moveItem(at: oldURL, to: newURL)
         }
+        refreshRelativePaths(in: folder)
+        try context.save()
+    }
+
+    func moveFolder(_ folder: Folder, to newParent: Folder?) throws {
+        guard folder.parent?.id != newParent?.id else { return }
+        if let newParent, ancestors(of: newParent).contains(folder.id) { return }
+
+        let oldURL = folderURL(for: folder)
+        let destParentURL = newParent.map { folderURL(for: $0) } ?? rootURL
+        try fm.createDirectory(at: destParentURL, withIntermediateDirectories: true)
+
+        let existing = Set((try? fm.contentsOfDirectory(atPath: destParentURL.path)) ?? [])
+        let uniqueName = NameDeduper.uniqueName(folder.name, existing: existing)
+
+        folder.name = uniqueName
+        folder.parent = newParent
+        let newURL = destParentURL.appendingPathComponent(uniqueName)
+
+        if fm.fileExists(atPath: oldURL.path) {
+            try fm.moveItem(at: oldURL, to: newURL)
+        }
+        refreshRelativePaths(in: folder)
         try context.save()
     }
 
     func deleteFolder(_ folder: Folder) throws {
+        guard !folderContainsItems(folder) else {
+            throw LibraryStoreError.folderNotEmpty
+        }
+
         let url = folderURL(for: folder)
         if fm.fileExists(atPath: url.path) {
             try fm.removeItem(at: url)
         }
         context.delete(folder)
         try context.save()
+    }
+
+    func folderContainsItems(_ folder: Folder) -> Bool {
+        if !folder.items.isEmpty { return true }
+        return folder.children.contains { folderContainsItems($0) }
+    }
+
+    private func refreshRelativePaths(in folder: Folder) {
+        let base = folderURL(for: folder)
+        for item in folder.items {
+            item.relativePath = relativePath(of: base.appendingPathComponent(item.fileName))
+        }
+        for child in folder.children {
+            refreshRelativePaths(in: child)
+        }
+    }
+
+    func reorderFolder(_ folder: Folder, relativeTo target: Folder, placeAfter: Bool = false) throws {
+        guard folder.id != target.id, folder.parent?.id == target.parent?.id else { return }
+
+        var ordered = folderSiblings(of: folder.parent)
+        ordered.removeAll { $0.id == folder.id }
+        guard let targetIndex = ordered.firstIndex(where: { $0.id == target.id }) else { return }
+        ordered.insert(folder, at: targetIndex + (placeAfter ? 1 : 0))
+
+        for (index, sibling) in ordered.enumerated() {
+            sibling.sortOrder = index
+        }
+        try context.save()
+    }
+
+    func reorderItem(_ item: Item, relativeTo target: Item, placeAfter: Bool = false) throws {
+        guard item.id != target.id else { return }
+
+        if item.folder?.id != target.folder?.id {
+            try moveItem(item, to: target.folder)
+        }
+
+        var ordered = itemSiblings(in: target.folder)
+        ordered.removeAll { $0.id == item.id }
+        guard let targetIndex = ordered.firstIndex(where: { $0.id == target.id }) else { return }
+        ordered.insert(item, at: targetIndex + (placeAfter ? 1 : 0))
+
+        for (index, sibling) in ordered.enumerated() {
+            sibling.sortOrder = index
+        }
+        try context.save()
+    }
+
+    private func folderSiblings(of parent: Folder?) -> [Folder] {
+        let all = (try? context.fetch(FetchDescriptor<Folder>())) ?? []
+        return all
+            .filter { $0.parent?.id == parent?.id }
+            .sorted { lhs, rhs in
+                if lhs.sortOrder != rhs.sortOrder { return lhs.sortOrder < rhs.sortOrder }
+                return lhs.name < rhs.name
+            }
+    }
+
+    private func itemSiblings(in folder: Folder?) -> [Item] {
+        let all = (try? context.fetch(FetchDescriptor<Item>())) ?? []
+        return all
+            .filter { $0.folder?.id == folder?.id }
+            .sorted { lhs, rhs in
+                if lhs.sortOrder != rhs.sortOrder { return lhs.sortOrder < rhs.sortOrder }
+                return lhs.importedAt > rhs.importedAt
+            }
     }
 
     // MARK: - Items
@@ -164,6 +274,48 @@ final class LibraryStore {
 
     func absoluteURL(for item: Item) -> URL {
         rootURL.appendingPathComponent(item.relativePath)
+    }
+
+    /// 文件被 App 内编辑器写回后，刷新大小、修改时间与全文索引。
+    func markEdited(_ item: Item, reindex: Bool = true) {
+        let url = absoluteURL(for: item)
+        if let attrs = try? fm.attributesOfItem(atPath: url.path) {
+            item.size = (attrs[.size] as? Int) ?? item.size
+        }
+        item.modifiedAt = Date()
+        try? context.save()
+        if reindex {
+            IndexingPipeline.index(item: item, store: self)
+        }
+    }
+
+    /// 文件在「文件」App / 预览等外部被修改后，回到前台时同步元数据与全文索引。
+    /// 返回本次发现变化的文件数。
+    @discardableResult
+    func refreshFromDisk() -> Int {
+        let items = (try? context.fetch(FetchDescriptor<Item>())) ?? []
+        var changed = 0
+
+        for item in items {
+            let url = absoluteURL(for: item)
+            guard let attrs = try? fm.attributesOfItem(atPath: url.path) else { continue }
+
+            let size = (attrs[.size] as? Int) ?? item.size
+            let modified = (attrs[.modificationDate] as? Date) ?? item.modifiedAt
+            guard size != item.size || abs(modified.timeIntervalSince(item.modifiedAt)) > 1 else {
+                continue
+            }
+
+            item.size = size
+            item.modifiedAt = modified
+            IndexingPipeline.index(item: item, store: self)
+            changed += 1
+        }
+
+        if changed > 0 {
+            try? context.save()
+        }
+        return changed
     }
 
     func relativePath(of url: URL) -> String {
