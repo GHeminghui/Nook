@@ -218,14 +218,26 @@ final class LibraryStore {
         return item
     }
 
+    /// 重命名资料文件，保留原扩展名并避免与同目录文件重名。
     func renameItem(_ item: Item, to raw: String) throws {
+        let baseName = PathSanitizer.sanitize(raw)
+        let ext = (item.fileName as NSString).pathExtension
+        let desired: String
+        if !ext.isEmpty, baseName.lowercased().hasSuffix("." + ext.lowercased()) {
+            desired = baseName
+        } else {
+            desired = ext.isEmpty ? baseName : "\(baseName).\(ext)"
+        }
+        guard desired != item.fileName else { return }
+
         let oldURL = absoluteURL(for: item)
         let dir = oldURL.deletingLastPathComponent()
         let existing = Set((try? fm.contentsOfDirectory(atPath: dir.path)) ?? [])
-        let desired = PathSanitizer.sanitize(raw)
+            .subtracting([item.fileName])
         let fileName = NameDeduper.uniqueName(desired, existing: existing)
         let newURL = dir.appendingPathComponent(fileName)
-        if oldURL != newURL, fm.fileExists(atPath: oldURL.path) {
+
+        if fm.fileExists(atPath: oldURL.path) {
             try fm.moveItem(at: oldURL, to: newURL)
         }
         item.fileName = fileName

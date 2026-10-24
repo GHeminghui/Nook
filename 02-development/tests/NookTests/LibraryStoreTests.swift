@@ -31,6 +31,36 @@ import Foundation
         #expect(FileManager.default.fileExists(atPath: store.absoluteURL(for: item).path))
     }
 
+    @Test func renameItemKeepsExtensionAndMovesFile() throws {
+        let folder = try store.createFolder(named: "数学", parent: nil)
+        let src = FileManager.default.temporaryDirectory.appendingPathComponent("习题.pdf")
+        try Data("x".utf8).write(to: src)
+        let item = try store.importFile(at: src, into: folder)
+        let oldURL = store.absoluteURL(for: item)
+
+        try store.renameItem(item, to: "第一次月考")
+
+        #expect(item.fileName == "第一次月考.pdf")
+        #expect(!FileManager.default.fileExists(atPath: oldURL.path))
+        #expect(FileManager.default.fileExists(atPath: store.absoluteURL(for: item).path))
+        #expect(store.relativePath(of: store.absoluteURL(for: item)) == "数学/第一次月考.pdf")
+    }
+
+    @Test func renameItemDeduplicatesInSameFolder() throws {
+        let folder = try store.createFolder(named: "数学", parent: nil)
+        for name in ["a.pdf", "b.pdf"] {
+            let src = FileManager.default.temporaryDirectory.appendingPathComponent(name)
+            try Data("x".utf8).write(to: src)
+            _ = try store.importFile(at: src, into: folder)
+        }
+        let items = try container.mainContext.fetch(FetchDescriptor<Item>())
+        let target = try #require(items.first { $0.fileName == "b.pdf" })
+
+        try store.renameItem(target, to: "a")
+
+        #expect(target.fileName == "a (1).pdf")
+    }
+
     @Test func deduplicatesOnImport() throws {
         let folder = try store.createFolder(named: "数学", parent: nil)
         let src = FileManager.default.temporaryDirectory.appendingPathComponent("习题.pdf")

@@ -12,6 +12,8 @@ struct ItemGrid: View {
     let onOpenFolder: (Folder) -> Void
 
     @State private var pendingDelete: Item?
+    @State private var renameTarget: Item?
+    @State private var renameText = ""
     @State private var activeAction: ItemAction?
     @State private var targetedItemID: UUID?
 
@@ -110,6 +112,10 @@ struct ItemGrid: View {
                                 }
                             }
                             .contextMenu {
+                                Button("重命名", systemImage: "pencil") {
+                                    renameText = (item.fileName as NSString).deletingPathExtension
+                                    renameTarget = item
+                                }
                                 Button("编辑标签", systemImage: "tag") {
                                     activeAction = .tags(item)
                                 }
@@ -139,6 +145,21 @@ struct ItemGrid: View {
             Button("取消", role: .cancel) { pendingDelete = nil }
         } message: {
             Text("文件会同时从磁盘移除，操作不可撤销。")
+        }
+        .alert("重命名", isPresented: Binding(
+            get: { renameTarget != nil },
+            set: { if !$0 { renameTarget = nil } }
+        )) {
+            TextField("名称", text: $renameText)
+            Button("确定") {
+                if let item = renameTarget {
+                    try? store.renameItem(item, to: renameText)
+                }
+                renameTarget = nil
+            }
+            Button("取消", role: .cancel) { renameTarget = nil }
+        } message: {
+            Text("扩展名会自动保留。")
         }
         .sheet(item: $activeAction) { action in
             switch action {
