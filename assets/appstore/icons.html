@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Nook · 图标概念稿</title>
+<style>
+  :root {
+    --ink: #1b1d22;
+    --muted: #6d7280;
+    --line: rgba(255, 255, 255, 0.08);
+    --bg: #101216;
+    --card: #181b21;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 56px 48px 72px;
+    background: radial-gradient(1200px 600px at 20% -10%, #1d2430 0%, var(--bg) 60%);
+    color: #f5f6f8;
+    font-family: -apple-system, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+  }
+  header { max-width: 1180px; margin: 0 auto 44px; }
+  h1 { font-size: 30px; margin: 0 0 10px; letter-spacing: -0.4px; }
+  header p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.7; }
+  .grid {
+    max-width: 1180px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px;
+  }
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 22px;
+    padding: 30px 30px 26px;
+  }
+  .card h2 { font-size: 17px; margin: 22px 0 6px; }
+  .card p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.65; }
+  .icon {
+    width: 300px; height: 300px; display: block;
+    border-radius: 22.37%;
+    overflow: hidden;
+    box-shadow: 0 26px 50px rgba(0, 0, 0, 0.45), 0 2px 0 rgba(255,255,255,.06) inset;
+  }
+  .icon img { width: 100%; height: 100%; display: block; }
+  .sizes { display: flex; align-items: flex-end; gap: 18px; margin-top: 22px; }
+  .sizes figure { margin: 0; text-align: center; }
+  .sizes img {
+    border-radius: 22.37%; display: block;
+    box-shadow: 0 6px 14px rgba(0,0,0,.35);
+  }
+  .sizes figcaption { color: #5d626d; font-size: 11px; margin-top: 6px; }
+  .notes {
+    max-width: 1180px; margin: 44px auto 0; padding: 24px 26px;
+    border: 1px solid var(--line); border-radius: 18px;
+    color: #a7acb7; font-size: 14px; line-height: 1.9;
+  }
+  .notes b { color: #e8eaf0; font-weight: 600; }
+  code { background: rgba(255,255,255,.07); padding: 1px 6px; border-radius: 6px; font-size: 13px; }
+</style>
+</head>
+<body>
+  <header>
+    <h1>Nook · 图标概念稿</h1>
+    <p>4 个方向，均为 1024×1024 全出血方形稿（上方展示的是 iOS 圆角遮罩效果）。浅色/深色/着色变体可在 Icon Composer 中基于同一分层稿生成。</p>
+  </header>
+
+  <div class="grid">
+    <div class="card">
+      <div class="icon"><img src="icons/icon-a-cards.svg" alt="资料卡片"></div>
+      <h2>A · 资料卡片</h2>
+      <p>三张错落卡片 + 珊瑚色书签。表达“资料归档”，阅读距离最远也能一眼认出是文档类 App。</p>
+      <div class="sizes">
+        <figure><img src="icons/icon-a-cards.svg" width="120"><figcaption>120</figcaption></figure>
+        <figure><img src="icons/icon-a-cards.svg" width="80"><figcaption>80</figcaption></figure>
+        <figure><img src="icons/icon-a-cards.svg" width="60"><figcaption>60</figcaption></figure>
+        <figure><img src="icons/icon-a-cards.svg" width="40"><figcaption>40</figcaption></figure>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="icon"><img src="icons/icon-b-folder.svg" alt="文件夹"></div>
+      <h2>B · 文件夹</h2>
+      <p>文件夹 + 露出的纸页 + 标签圆点。直接对应“真实文件夹 + 标签”的产品模型，语义最准确。</p>
+      <div class="sizes">
+        <figure><img src="icons/icon-b-folder.svg" width="120"><figcaption>120</figcaption></figure>
+        <figure><img src="icons/icon-b-folder.svg" width="80"><figcaption>80</figcaption></figure>
+        <figure><img src="icons/icon-b-folder.svg" width="60"><figcaption>60</figcaption></figure>
+        <figure><img src="icons/icon-b-folder.svg" width="40"><figcaption>40</figcaption></figure>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="icon"><img src="icons/icon-c-book.svg" alt="书与铅笔"></div>
+      <h2>C · 书与铅笔</h2>
+      <p>打开的书 + 铅笔。突出“教学资料 + 标注编辑”，适合强调 PDF 批注卖点。</p>
+      <div class="sizes">
+        <figure><img src="icons/icon-c-book.svg" width="120"><figcaption>120</figcaption></figure>
+        <figure><img src="icons/icon-c-book.svg" width="80"><figcaption>80</figcaption></figure>
+        <figure><img src="icons/icon-c-book.svg" width="60"><figcaption>60</figcaption></figure>
+        <figure><img src="icons/icon-c-book.svg" width="40"><figcaption>40</figcaption></figure>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="icon"><img src="icons/icon-d-monogram.svg" alt="N 字书页"></div>
+      <h2>D · N 字书页</h2>
+      <p>书页 + 品牌首字母 N。品牌感最强，但语义需要配合 App 名称理解，适合作为长期品牌标识。</p>
+      <div class="sizes">
+        <figure><img src="icons/icon-d-monogram.svg" width="120"><figcaption>120</figcaption></figure>
+        <figure><img src="icons/icon-d-monogram.svg" width="80"><figcaption>80</figcaption></figure>
+        <figure><img src="icons/icon-d-monogram.svg" width="60"><figcaption>60</figcaption></figure>
+        <figure><img src="icons/icon-d-monogram.svg" width="40"><figcaption>40</figcaption></figure>
+      </div>
+    </div>
+  </div>
+
+  <div class="notes">
+    <b>上架规范</b><br>
+    · 提交尺寸 <code>1024×1024</code>，PNG，<b>不能有透明通道</b>；不要自己切圆角，系统会自动裁。<br>
+    · iOS 26 可用 <b>Icon Composer</b> 做 Liquid Glass 分层（背景层 / 图形层 / 高光层），同一套图形可自动生成浅色、深色、着色三种外观。<br>
+    · 建议最终只保留 1 个方向，避免品牌认知分散。<br>
+    <b>导出</b><br>
+    · 源文件在 <code>assets/appstore/icons/*.svg</code>，可直接拖进 Figma / Sketch / Icon Composer。<br>
+    · PNG 已导出到 <code>assets/appstore/exports/</code>（1024×1024）。
+  </div>
+</body>
+</html>
