@@ -54,4 +54,15 @@ import Foundation
         #expect(results.count == 1)
         #expect(results.first?.id == direct.id)
     }
+
+    @Test func localFileNeedsNoICloudDownload() async throws {
+        let url = FileManager.default.temporaryDirectory
+            .appendingPathComponent("\(UUID().uuidString).pdf")
+        try Data("x".utf8).write(to: url)
+
+        #expect(PDFMarkupPresenter.needsDownload(url) == false)
+
+        await PDFMarkupPresenter.ensureDownloaded(url, timeout: 0.2)
+        #expect(FileManager.default.fileExists(atPath: url.path))
+    }
 }

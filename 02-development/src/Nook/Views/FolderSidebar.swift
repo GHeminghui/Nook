@@ -299,7 +299,14 @@ struct FolderSidebar: View {
         canDelete(folder) ? "删除" : "删除（需先清空文件）"
     }
 
-    private func rowBackground(isSelected: Bool, isTargeted: Bool) -> Color {
+    private func rowBackground(isSelected: Bool, isTargeted: Bool) -> some View {
+        RoundedRectangle(cornerRadius: 8, style: .continuous)
+            .fill(rowBackgroundColor(isSelected: isSelected, isTargeted: isTargeted))
+            .padding(.vertical, 2)
+            .padding(.horizontal, 6)
+    }
+
+    private func rowBackgroundColor(isSelected: Bool, isTargeted: Bool) -> Color {
         if isTargeted { return Color.accentColor.opacity(0.3) }
         return isSelected ? Color.accentColor.opacity(0.15) : Color.clear
     }

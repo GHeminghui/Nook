@@ -185,7 +185,7 @@ struct ItemGrid: View {
     /// PDF 直接用系统 Quick Look 打开，阅读与标注都在系统界面里完成。
     private func openInQuickLook(_ item: Item) {
         let destination = store.absoluteURL(for: item)
-        PDFMarkupPresenter.shared.present(url: destination) { editedURL in
+        PDFMarkupPresenter.shared.open(url: destination) { editedURL in
             if editedURL.standardizedFileURL != destination.standardizedFileURL {
                 if let data = try? Data(contentsOf: editedURL) {
                     try? data.write(to: destination, options: .atomic)

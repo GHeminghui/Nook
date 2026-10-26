@@ -9,9 +9,29 @@ final class PDFMarkupPresenter: NSObject, QLPreviewControllerDataSource, QLPrevi
     private var url: URL?
     private var onSaved: ((URL) -> Void)?
     private var isPresenting = false
+    private var isOpening = false
+
+    /// 打开 PDF：先提示加载状态（必要时等 iCloud 下载），再呈现 Quick Look。
+    func open(url: URL, onSaved: @escaping (URL) -> Void) {
+        guard !isOpening, !isPresenting else { return }
+        isOpening = true
+        PDFLoadingOverlay.shared.show(
+            Self.needsDownload(url) ? "正在从 iCloud 下载…" : "正在打开…"
+        )
+
+        Task { @MainActor in
+            await Self.ensureDownloaded(url)
+            isOpening = false
+            PDFLoadingOverlay.shared.update("正在打开…")
+            present(url: url, onSaved: onSaved)
+        }
+    }
 
     func present(url: URL, onSaved: @escaping (URL) -> Void) {
-        guard !isPresenting, let host = Self.topViewController() else { return }
+        guard let host = Self.topViewController() else {
+            PDFLoadingOverlay.shared.hide()
+            return
+        }
         isPresenting = true
         self.url = url
         self.onSaved = onSaved
@@ -20,11 +40,18 @@ final class PDFMarkupPresenter: NSObject, QLPreviewControllerDataSource, QLPrevi
         preview.dataSource = self
         preview.delegate = self
         preview.modalPresentationStyle = .fullScreen
-        host.present(preview, animated: true)
+        host.present(preview, animated: true) {
+            // 呈现动画结束后给系统预览一点首帧渲染时间，随后淡出浮层。
+            Task { @MainActor in
+                try? await Task.sleep(nanoseconds: 200_000_000)
+                PDFLoadingOverlay.shared.hide()
+            }
+        }
     }
 
     func previewControllerDidDismiss(_ previewController: QLPreviewController) {
         isPresenting = false
+        PDFLoadingOverlay.shared.hide()
     }
 
     func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
@@ -70,5 +97,31 @@ final class PDFMarkupPresenter: NSObject, QLPreviewControllerDataSource, QLPrevi
             top = presented
         }
         return top
+    }
+}
+
+// MARK: - iCloud 下载状态
+
+extension PDFMarkupPresenter {
+    /// 文件是否还只在 iCloud 上（本地没有完整副本）。
+    static func needsDownload(_ url: URL) -> Bool {
+        guard let values = try? url.resourceValues(
+            forKeys: [.isUbiquitousItemKey, .ubiquitousItemDownloadingStatusKey]
+        ), values.isUbiquitousItem == true else {
+            return false
+        }
+        return values.ubiquitousItemDownloadingStatus != .current
+    }
+
+    /// 触发下载并短暂等待，超时后也允许继续打开（Quick Look 会自己显示下载进度）。
+    static func ensureDownloaded(_ url: URL, timeout: TimeInterval = 3) async {
+        guard needsDownload(url) else { return }
+        try? FileManager.default.startDownloadingUbiquitousItem(at: url)
+
+        let deadline = Date().addingTimeInterval(timeout)
+        while Date() < deadline {
+            if !needsDownload(url) { return }
+            try? await Task.sleep(nanoseconds: 200_000_000)
+        }
     }
 }
