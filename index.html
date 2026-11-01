@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nook</title>
+<style>
+  :root { --ink:#1d1f27; --muted:#5f6270; --paper:#fcfaf5; --card:#fff; --line:#e7e1d4; --indigo:#4c5cae; --coral:#ff6b4a; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-system,"PingFang SC","Helvetica Neue",Arial,sans-serif; line-height:1.8; }
+  main { max-width:720px; margin:0 auto; padding:72px 24px 96px; }
+  .kicker { color:var(--muted); font-size:13px; letter-spacing:3px; }
+  h1 { font-size:40px; margin:10px 0 6px; letter-spacing:-0.6px; }
+  .rule { width:54px; height:4px; background:var(--coral); border-radius:2px; margin:18px 0 26px; }
+  p { color:#2b2e36; font-size:16px; }
+  .grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:28px; }
+  a.card { display:block; background:var(--card); border:1px solid var(--line); border-radius:16px; padding:20px 22px;
+           text-decoration:none; color:var(--ink); transition:transform .15s ease; }
+  a.card:hover { transform:translateY(-2px); }
+  a.card b { display:block; font-size:17px; margin-bottom:4px; }
+  a.card span { color:var(--muted); font-size:14px; }
+  .en { margin-top:64px; padding-top:32px; border-top:1px solid var(--line); }
+  footer { margin-top:48px; color:var(--muted); font-size:12px; }
+  @media (max-width:560px) { .grid { grid-template-columns:1fr; } h1 { font-size:32px; } }
+</style>
+</head>
+<body>
+<main>
+  <div class="kicker">NOOK</div>
+  <h1>Nook</h1>
+  <div class="rule"></div>
+  <p>课件、试卷、错题和网页素材，收进一个地方。多级文件夹、标签、全文搜索，PDF 直接在系统预览里标注。</p>
+
+  <div class="grid">
+    <a class="card" href="support.html"><b>支持与帮助</b><span>快速开始、常见问题、联系方式</span></a>
+    <a class="card" href="privacy.html"><b>隐私政策</b><span>不收集数据，资料保存在你的设备与 iCloud</span></a>
+  </div>
+
+  <div class="en">
+    <div class="kicker">NOOK · STUDY LIBRARY</div>
+    <h1 style="font-size:30px">Support</h1>
+    <p>Slides, exams, mistake logs and web pages in one place. Nested folders, tags, full-text search, and PDF markup with the system preview.</p>
+    <div class="grid">
+      <a class="card" href="support.html"><b>Support</b><span>Getting started, FAQ, contact</span></a>
+      <a class="card" href="privacy.html"><b>Privacy Policy</b><span>No data collected; files stay on your device and in your iCloud</span></a>
+    </div>
+  </div>
+
+  <footer>© 2026 Nook. All rights reserved.</footer>
+</main>
+</body>
+</html>
