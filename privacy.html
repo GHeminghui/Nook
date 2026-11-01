@@ -3,6 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+(function () {
+  try {
+    var q = new URLSearchParams(location.search).get('lang');
+    var s = localStorage.getItem('zhizhan-lang');
+    var l = q || s || ((navigator.language || 'zh').toLowerCase().indexOf('zh') === 0 ? 'zh' : 'en');
+    l = l === 'en' ? 'en' : 'zh';
+    document.documentElement.setAttribute('data-lang', l);
+    document.documentElement.lang = l === 'zh' ? 'zh-CN' : 'en';
+  } catch (e) {
+    document.documentElement.setAttribute('data-lang', 'zh');
+  }
+})();
+</script>
 <title>知栈 · 隐私政策 / Privacy Policy</title>
 <style>
   :root { --ink:#1d1f27; --muted:#5f6270; --line:#e7e1d4; --paper:#fcfaf5; --indigo:#4c5cae; --coral:#ff6b4a; }
@@ -21,10 +35,26 @@
   .en { margin-top:56px; padding-top:32px; border-top:1px solid var(--line); }
   a { color:var(--indigo); }
   footer { margin-top:48px; color:var(--muted); font-size:12px; }
+  html[data-lang="zh"] [data-lang="en"],
+  html[data-lang="en"] [data-lang="zh"] { display:none !important; }
+  .topbar { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:30px; }
+  .topbar .brand { display:flex; align-items:center; gap:8px; font-weight:600; font-size:14px; color:var(--ink); }
+  .lang-switch { display:flex; gap:2px; padding:3px; border:1px solid var(--line); border-radius:999px; background:#fff; }
+  .lang-switch button { border:0; background:transparent; padding:4px 10px; border-radius:999px; font-size:12px; color:var(--muted); cursor:pointer; font-family:inherit; }
+  .lang-switch button.active { background:var(--ink); color:#fff; }
 </style>
 </head>
-<body>
+<body data-title-zh="知栈 · 隐私政策" data-title-en="KnowStack · Privacy Policy">
 <main>
+  <div class="topbar">
+    <a class="brand" href="index.html" data-lang-link><span data-lang="zh">← 知栈</span><span data-lang="en">← KnowStack</span></a>
+    <div class="lang-switch" role="group" aria-label="Language">
+      <button type="button" data-set-lang="zh">中文</button>
+      <button type="button" data-set-lang="en">EN</button>
+    </div>
+  </div>
+  <div data-lang="zh">
+
   <div class="kicker">知栈</div>
   <h1>隐私政策</h1>
   <div class="rule"></div>
@@ -68,7 +98,9 @@
   <h2>八、联系我们</h2>
   <p>如有隐私相关问题，请联系：<a href="mailto:minghuihe2022@163.com">minghuihe2022@163.com</a>。</p>
 
-  <div class="en">
+  </div>
+
+  <div class="en" data-lang="en">
     <div class="kicker">KNOWSTACK</div>
     <h1 style="font-size:28px">Privacy Policy</h1>
     <p class="meta">Effective: November 1, 2026 · Last updated: November 1, 2026</p>
@@ -114,5 +146,6 @@
 
   <footer>© 2026 知栈 · KnowStack. All rights reserved.</footer>
 </main>
+<script src="lang.js" defer></script>
 </body>
 </html>
