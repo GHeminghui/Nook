@@ -62,7 +62,7 @@ struct MoveItemSheet: View {
 
     private func row(_ title: String, systemImage: String, isSelected: Bool) -> some View {
         HStack {
-            Label(title, systemImage: systemImage)
+            Label(LocalizedStringKey(title), systemImage: systemImage)
             Spacer()
             if isSelected {
                 Image(systemName: "checkmark")

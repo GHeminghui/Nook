@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+(function () {
+  try {
+    var q = new URLSearchParams(location.search).get('lang');
+    var s = localStorage.getItem('zhizhan-lang');
+    var l = q || s || ((navigator.language || 'zh').toLowerCase().indexOf('zh') === 0 ? 'zh' : 'en');
+    l = l === 'en' ? 'en' : 'zh';
+    document.documentElement.setAttribute('data-lang', l);
+    document.documentElement.lang = l === 'zh' ? 'zh-CN' : 'en';
+  } catch (e) {
+    document.documentElement.setAttribute('data-lang', 'zh');
+  }
+})();
+</script>
+<title>知栈 · 支持 / Support</title>
+<style>
+  :root { --ink:#1d1f27; --muted:#5f6270; --line:#e7e1d4; --paper:#fcfaf5; --indigo:#4c5cae; --coral:#ff6b4a; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--paper); color:var(--ink);
+         font-family:-apple-system,"PingFang SC","Helvetica Neue",Arial,sans-serif;
+         line-height:1.85; }
+  main { max-width:760px; margin:0 auto; padding:56px 24px 88px; }
+  .kicker { color:var(--muted); font-size:13px; letter-spacing:2px; }
+  h1 { font-size:32px; margin:10px 0 6px; letter-spacing:-0.5px; }
+  .rule { width:52px; height:4px; background:var(--coral); border-radius:2px; margin:16px 0 28px; }
+  h2 { font-size:18px; margin:32px 0 8px; color:var(--indigo); }
+  h3 { font-size:15px; margin:22px 0 4px; }
+  p, li { font-size:15px; color:#2b2e36; }
+  ol, ul { padding-left:22px; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:14px; padding:18px 20px; margin:14px 0; }
+  .meta { color:var(--muted); font-size:13px; }
+  .en { margin-top:56px; padding-top:32px; border-top:1px solid var(--line); }
+  a { color:var(--indigo); }
+  footer { margin-top:48px; color:var(--muted); font-size:12px; }
+  html[data-lang="zh"] [data-lang="en"],
+  html[data-lang="en"] [data-lang="zh"] { display:none !important; }
+  .topbar { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:30px; }
+  .topbar .brand { display:flex; align-items:center; gap:8px; font-weight:600; font-size:14px; color:var(--ink); }
+  .lang-switch { display:flex; gap:2px; padding:3px; border:1px solid var(--line); border-radius:999px; background:#fff; }
+  .lang-switch button { border:0; background:transparent; padding:4px 10px; border-radius:999px; font-size:12px; color:var(--muted); cursor:pointer; font-family:inherit; }
+  .lang-switch button.active { background:var(--ink); color:#fff; }
+</style>
+</head>
+<body data-title-zh="知栈 · 支持" data-title-en="KnowStack · Support">
+<main>
+  <div class="topbar">
+    <a class="brand" href="index.html" data-lang-link><span data-lang="zh">← 知栈</span><span data-lang="en">← KnowStack</span></a>
+    <div class="lang-switch" role="group" aria-label="Language">
+      <button type="button" data-set-lang="zh">中文</button>
+      <button type="button" data-set-lang="en">EN</button>
+    </div>
+  </div>
+  <div data-lang="zh">
+
+  <div class="kicker">知栈</div>
+  <h1>支持与帮助</h1>
+  <div class="rule"></div>
+  <p class="meta">适用于 iPadOS 17 及以上版本</p>
+
+  <div class="card">
+    <strong>快速开始</strong>
+    <ol>
+      <li>打开 App，点右上角「导入」，从「文件」中选择 PDF、图片或 HTML。</li>
+      <li>在左侧新建文件夹，把资料移动进去；一份资料可以打多个标签。</li>
+      <li>在搜索框输入文件名或正文关键词，也可以点标签筛选。</li>
+      <li>点 PDF 会用系统预览打开，右上角标记按钮可手写、加形状和签名。</li>
+    </ol>
+  </div>
+
+  <h2>常见问题</h2>
+
+  <h3>为什么有些 PDF 搜不到内容？</h3>
+  <p>正文检索依赖 PDF 里的文字层。扫描件或图片型 PDF 没有文字层，暂不支持 OCR，因此搜不到；可以先用支持 OCR 的工具转换后再导入。</p>
+
+  <h3>iCloud 没有同步怎么办？</h3>
+  <p>先确认「设置 → Apple ID → iCloud → iCloud Drive」已开启，并允许本 App 使用 iCloud；再确认设备已联网。若仍未同步，可在「文件」App 中查看知栈文件夹是否存在对应文件。没有登录 iCloud 时，资料只保存在本机。</p>
+
+  <h3>资料存在哪里？会丢吗？</h3>
+  <p>资料以真实文件保存在 App 的 Documents 目录，可在「文件」App 的「我的 iPad → 知栈」中查看。建议开启 iCloud 或定期把重要文件另存一份。</p>
+
+  <h3>为什么网页课件里的图片不显示？</h3>
+  <p>HTML 引用了外部网络资源时，离线或资源失效会导致部分内容无法显示。把资源一起放到同目录、使用相对路径，可以避免这个问题。</p>
+
+  <h3>分享扩展找不到知栈？</h3>
+  <p>在分享面板中向左滑动「更多」，打开「存入知栈」开关；如果没有出现在列表里，重启设备后再试。</p>
+
+  <h3>删除文件夹会删掉里面的文件吗？</h3>
+  <p>文件夹内（含子文件夹）还有文件时，App 会阻止删除；清空后删除文件夹不会影响其他位置的文件。</p>
+
+  <h2>反馈与联系</h2>
+  <p>遇到问题或有功能建议，请邮件联系：<a href="mailto:minghuihe2022@163.com">minghuihe2022@163.com</a>。<br>
+  反馈时请附上：iPad 型号、系统版本、App 版本，以及复现步骤（可截图）。</p>
+
+  </div>
+
+  <div class="en" data-lang="en">
+    <div class="kicker">KNOWSTACK</div>
+    <h1 style="font-size:28px">Support</h1>
+    <p class="meta">For iPadOS 17 and later</p>
+
+    <h2>Quick start</h2>
+    <ol>
+      <li>Open the app and tap Import (top right); pick PDFs, images or HTML from Files.</li>
+      <li>Create folders in the sidebar, move items in, and add multiple tags.</li>
+      <li>Search by file name or content, or tap a tag chip to filter.</li>
+      <li>Tap a PDF to open the system preview; use the markup button to handwrite, add shapes or sign.</li>
+    </ol>
+
+    <h2>FAQ</h2>
+    <h3>Why can't some PDFs be found by search?</h3>
+    <p>Full-text search relies on a text layer. Scanned or image-only PDFs have none; OCR is not supported yet.</p>
+    <h3>iCloud is not syncing</h3>
+    <p>Check that iCloud Drive is enabled in Settings, that the app is allowed to use iCloud, and that the device is online. Without iCloud, data stays on the device.</p>
+    <h3>Where are my files?</h3>
+    <p>They are stored as real documents in the app's Documents folder, visible in Files under “On My iPad → KnowStack”. Keep iCloud on or export important files as a backup.</p>
+    <h3>Images in an HTML slide are missing</h3>
+    <p>Pages that reference external resources may render partially offline. Keep assets next to the HTML file and use relative paths.</p>
+    <h3>KnowStack is missing from the share sheet</h3>
+    <p>Swipe left in the share sheet, tap More, and enable KnowStack. Restart the device if it still does not appear.</p>
+    <h3>Does deleting a folder delete its files?</h3>
+    <p>Deleting is blocked while a folder (or any subfolder) still contains files. Once empty, deleting the folder does not affect files elsewhere.</p>
+
+    <h2>Contact</h2>
+    <p><a href="mailto:minghuihe2022@163.com">minghuihe2022@163.com</a>. Please include your iPad model, OS version, app version and reproduction steps.</p>
+  </div>
+
+  <footer>© 2026 知栈 · KnowStack. All rights reserved.</footer>
+</main>
+<script src="lang.js" defer></script>
+</body>
+</html>

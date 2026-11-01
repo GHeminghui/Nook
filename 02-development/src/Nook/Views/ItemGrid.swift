@@ -290,7 +290,7 @@ struct FolderCell: View {
                 .lineLimit(2)
                 .multilineTextAlignment(.leading)
 
-            Text("\(folder.items.count) 份资料")
+            Text(String(format: String(localized: "%lld 份资料"), folder.items.count))
                 .font(.caption2)
                 .foregroundStyle(.secondary)
         }

@@ -16,13 +16,13 @@ final class PDFMarkupPresenter: NSObject, QLPreviewControllerDataSource, QLPrevi
         guard !isOpening, !isPresenting else { return }
         isOpening = true
         PDFLoadingOverlay.shared.show(
-            Self.needsDownload(url) ? "正在从 iCloud 下载…" : "正在打开…"
+            Self.needsDownload(url) ? String(localized: "正在从 iCloud 下载…") : String(localized: "正在打开…")
         )
 
         Task { @MainActor in
             await Self.ensureDownloaded(url)
             isOpening = false
-            PDFLoadingOverlay.shared.update("正在打开…")
+            PDFLoadingOverlay.shared.update(String(localized: "正在打开…"))
             present(url: url, onSaved: onSaved)
         }
     }

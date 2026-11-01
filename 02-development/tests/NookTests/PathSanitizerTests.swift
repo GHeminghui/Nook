@@ -6,7 +6,7 @@ import Testing
         #expect(PathSanitizer.sanitize("a/b:c?d") == "a_b_c_d")
     }
     @Test func fallsBackOnEmpty() {
-        #expect(PathSanitizer.sanitize("   ") == "未命名")
+        #expect(PathSanitizer.sanitize("   ") == PathSanitizer.fallbackName)
     }
     @Test func detectsTraversal() {
         #expect(PathSanitizer.isSafe(relativePath: "数学/../秘密") == false)

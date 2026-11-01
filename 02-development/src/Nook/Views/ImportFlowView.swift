@@ -81,7 +81,7 @@ struct BatchTagPicker: View {
                     }
                 }
             }
-            .navigationTitle("给 \(items.count) 份资料打标签")
+            .navigationTitle(Text(String(format: String(localized: "给 %lld 份资料打标签"), items.count)))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

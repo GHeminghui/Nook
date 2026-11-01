@@ -82,7 +82,7 @@ struct ImageMarkupView: View {
         guard let image else { return }
         let ext = url.pathExtension.lowercased()
         guard ["png", "jpg", "jpeg"].contains(ext) else {
-            saveError = "暂不支持编辑 .\(ext) 图片，请先转为 PNG/JPG"
+            saveError = String(format: String(localized: "暂不支持编辑 .%@ 图片，请先转为 PNG/JPG"), ext)
             return
         }
 
@@ -107,7 +107,7 @@ struct ImageMarkupView: View {
         }
 
         guard let data else {
-            saveError = "图片编码失败"
+            saveError = String(localized: "图片编码失败")
             return
         }
 

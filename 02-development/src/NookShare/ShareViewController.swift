@@ -7,7 +7,7 @@ final class ShareViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        label.text = "正在存入 Nook…"
+        label.text = String(localized: "正在存入知栈…")
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(label)
@@ -23,7 +23,7 @@ final class ShareViewController: UIViewController {
             .flatMap { $0.attachments ?? [] } ?? []
 
         guard !providers.isEmpty else {
-            finish(message: "没有可保存的内容")
+            finish(message: String(localized: "没有可保存的内容"))
             return
         }
 
@@ -40,7 +40,7 @@ final class ShareViewController: UIViewController {
         }
 
         group.notify(queue: .main) { [weak self] in
-            self?.finish(message: "已存入 Nook")
+            self?.finish(message: String(localized: "已存入知栈"))
         }
     }
 

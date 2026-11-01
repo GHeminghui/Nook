@@ -175,7 +175,7 @@ struct FolderSidebar: View {
             }
             .disabled(newSubfolderName.trimmingCharacters(in: .whitespaces).isEmpty)
         } message: {
-            Text("创建位置：\(newSubfolderLocation)")
+            Text(String(format: String(localized: "创建位置：%@"), newSubfolderLocation))
         }
         .alert("重命名文件夹", isPresented: Binding(
             get: { renameTarget != nil },
@@ -275,7 +275,7 @@ struct FolderSidebar: View {
     }
 
     private func folderLabel(_ title: String, systemImage: String) -> some View {
-        Label(title, systemImage: systemImage)
+        Label(LocalizedStringKey(title), systemImage: systemImage)
             .frame(maxWidth: .infinity, alignment: .leading)
             .contentShape(Rectangle())
     }
@@ -287,7 +287,7 @@ struct FolderSidebar: View {
             names.append(item.name)
             current = item.parent
         }
-        return names.isEmpty ? "顶层" : Array(names.reversed()).joined(separator: " / ")
+        return names.isEmpty ? String(localized: "顶层") : Array(names.reversed()).joined(separator: " / ")
     }
 
     private func canDelete(_ folder: Folder) -> Bool {
@@ -295,7 +295,7 @@ struct FolderSidebar: View {
         return !store.folderContainsItems(folder)
     }
 
-    private func deleteTitle(for folder: Folder) -> String {
+    private func deleteTitle(for folder: Folder) -> LocalizedStringKey {
         canDelete(folder) ? "删除" : "删除（需先清空文件）"
     }
 

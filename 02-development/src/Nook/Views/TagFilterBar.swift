@@ -28,7 +28,7 @@ struct TagFilterBar: View {
                     Button {
                         criteria.matchAllTags.toggle()
                     } label: {
-                        Text(criteria.matchAllTags ? "同时满足" : "满足任一")
+                        Text(criteria.matchAllTags ? String(localized: "同时满足") : String(localized: "满足任一"))
                             .font(.caption)
                             .padding(.horizontal, 10)
                             .padding(.vertical, 6)

@@ -16,12 +16,14 @@ struct LibraryView: View {
     var body: some View {
         NavigationSplitView {
             FolderSidebar(selection: $selection, store: store)
-                .navigationTitle("Nook")
+                .navigationTitle("知栈")
                 .safeAreaInset(edge: .bottom) {
-                    SyncStatusView(enabled: ICloudSync.isEnabled)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.horizontal, 16)
-                        .padding(.bottom, 8)
+                    if showsSyncStatus {
+                        SyncStatusView(enabled: ICloudSync.isEnabled)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.horizontal, 16)
+                            .padding(.bottom, 8)
+                    }
                 }
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {
@@ -54,7 +56,7 @@ struct LibraryView: View {
                         ProgressView()
                     }
                 }
-                .navigationTitle(selection?.name ?? "全部资料")
+                .navigationTitle(selection.map { Text($0.name) } ?? Text("全部资料"))
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {
                         if let store {
@@ -75,6 +77,14 @@ struct LibraryView: View {
                 let newStore = LibraryStore(context: context, rootURL: ICloudSync.libraryRoot())
                 store = newStore
                 try? SharedInbox.drain(into: newStore)
+                #if DEBUG
+                DemoData.seedIfNeeded(store: newStore)
+                DemoData.applyRequestedScreen(
+                    store: newStore,
+                    criteria: $criteria,
+                    selection: $selection
+                )
+                #endif
             }
         }
         .alert("新建文件夹", isPresented: $showingNewFolder) {
@@ -87,7 +97,7 @@ struct LibraryView: View {
                 }
             }
         } message: {
-            Text("创建位置：\(newFolderParentPath)")
+            Text(String(format: String(localized: "创建位置：%@"), newFolderParentPath))
         }
         .alert("新建标签", isPresented: $showingNewTag) {
             TextField("标签名称", text: $newTagName)
@@ -106,6 +116,14 @@ struct LibraryView: View {
             names.append(folder.name)
             current = folder.parent
         }
-        return names.isEmpty ? "顶层" : Array(names.reversed()).joined(separator: " / ")
+        return names.isEmpty ? String(localized: "顶层") : Array(names.reversed()).joined(separator: " / ")
+    }
+
+    private var showsSyncStatus: Bool {
+        #if DEBUG
+        return !DemoData.hidesSyncStatus
+        #else
+        return true
+        #endif
     }
 }

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>KnowStack · App Store screenshots (iPad 13" landscape)</title>
+<style>
+  :root { --ink:#22242c; --muted:#5f6270; --indigo:#4c5cae; --coral:#ff6b4a; --amber:#ffc24b; }
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; }
+  body { background:#202329; font-family:-apple-system,"PingFang SC","Helvetica Neue",Arial,sans-serif;
+         color:var(--ink); display:flex; flex-direction:column; align-items:center; gap:48px; padding:48px 0; }
+  .slide { width:2752px; height:2064px; position:relative; overflow:hidden; flex:0 0 auto;
+           background:linear-gradient(150deg,#fcfaf5 0%,#f4efe5 48%,#ebe4d6 100%); }
+  .slide .blob { position:absolute; border-radius:50%; filter:blur(100px); opacity:.55; }
+  .b1 { width:1000px; height:1000px; background:rgba(76,92,174,.26); }
+  .b2 { width:820px; height:820px; background:rgba(255,107,74,.18); }
+  .b3 { width:760px; height:760px; background:rgba(255,194,75,.20); }
+  .content { position:absolute; z-index:3; width:660px; top:430px; }
+  .content.left { left:120px; }
+  .content.right { right:120px; }
+  .eyebrow { display:inline-flex; align-items:center; gap:12px; font-size:26px; font-weight:600;
+             letter-spacing:2px; color:var(--indigo); background:rgba(76,92,174,.10);
+             border:2px solid rgba(76,92,174,.18); padding:10px 22px; border-radius:999px; }
+  .eyebrow .dot { width:12px; height:12px; border-radius:50%; background:var(--coral); }
+  h1 { margin:40px 0 0; font-size:80px; line-height:1.16; letter-spacing:-3px; font-weight:700; color:#1d1f27; }
+  h1 .accent { color:var(--coral); }
+  .sub { margin:22px 0 0; font-size:32px; line-height:1.55; color:var(--muted); font-weight:400; max-width:640px; }
+
+  .device { position:absolute; z-index:2; top:380px; width:1900px; height:1458px;
+            background:#101116; border-radius:104px; padding:66px;
+            box-shadow:0 50px 120px rgba(20,22,30,.34), 0 0 0 3px rgba(255,255,255,.14) inset; }
+  .device.right { right:60px; }
+  .device.left { left:60px; }
+  .device::after { content:""; position:absolute; top:22px; left:50%; transform:translateX(-50%);
+                   width:9px; height:9px; border-radius:50%; background:#23252b; }
+  .screen { width:100%; height:100%; border-radius:44px; overflow:hidden; background:#fff; position:relative; }
+  .screen img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
+  .hint { display:none; }
+  body.export { background:#fff; padding:0; gap:0; }
+  body.export .slide { display:none; }
+  body.export .slide.active { display:block; }
+  /* 官方 Apple 产品边框：图像自带透明屏幕与阴影 */
+  .device { top:380px; right:60px; width:1900px; height:auto; background:none; padding:0; border-radius:0; box-shadow:none; }
+  .device::after { content:none; }
+  .device img { width:100%; display:block; }
+  @page { size:2752px 2064px; margin:0; }
+</style>
+</head>
+<body>
+
+  <!-- 1 -->
+  <section class="slide" data-index="1">
+    <div class="blob b1" style="left:-260px; top:-280px;"></div>
+    <div class="blob b2" style="right:-240px; bottom:-300px;"></div>
+    <div class="blob b3" style="left:760px; bottom:-340px;"></div>
+    <div class="content left">
+      <div class="eyebrow"><span class="dot"></span>KnowStack</div>
+      <h1>All your study<br>materials, together</h1>
+      <p class="sub">Slides, exams and notes — one place</p>
+    </div>
+    <div class="device"><img src="mockups/en/1.png" alt=""></div>
+  </section>
+  <!-- 2 -->
+  <section class="slide" data-index="2">
+    <div class="blob b1" style="left:-300px; top:420px;"></div>
+    <div class="blob b2" style="right:-280px; top:-260px;"></div>
+    <div class="blob b3" style="left:900px; bottom:-320px;"></div>
+    <div class="content left">
+      <div class="eyebrow"><span class="dot"></span>Folders</div>
+      <h1>Real folders,<br><span class='accent'>familiar</span> hierarchy</h1>
+      <p class="sub">Nested subfolders, organized like a computer</p>
+    </div>
+    <div class="device"><img src="mockups/en/2.png" alt=""></div>
+  </section>
+  <!-- 3 -->
+  <section class="slide" data-index="3">
+    <div class="blob b1" style="left:-240px; bottom:-260px;"></div>
+    <div class="blob b2" style="right:-220px; top:-300px;"></div>
+    <div class="blob b3" style="left:820px; top:520px;"></div>
+    <div class="content left">
+      <div class="eyebrow"><span class="dot"></span>PDF markup</div>
+      <h1>Open and<br><span class='accent'>annotate</span></h1>
+      <p class="sub">Handwrite, shapes and signatures in system preview</p>
+    </div>
+    <div class="device"><img src="mockups/en/3.png" alt=""></div>
+  </section>
+  <!-- 4 -->
+  <section class="slide" data-index="4">
+    <div class="blob b1" style="left:-280px; top:-240px;"></div>
+    <div class="blob b2" style="right:-260px; bottom:-260px;"></div>
+    <div class="blob b3" style="left:700px; top:700px;"></div>
+    <div class="content left">
+      <div class="eyebrow"><span class="dot"></span>Quick find</div>
+      <h1>Tags + full-text search<br><span class='accent'>find</span> it fast</h1>
+      <p class="sub">Filter by folder, tag and keyword</p>
+    </div>
+    <div class="device"><img src="mockups/en/4.png" alt=""></div>
+  </section>
+  <!-- 5 -->
+  <section class="slide" data-index="5">
+    <div class="blob b1" style="left:-260px; bottom:-300px;"></div>
+    <div class="blob b2" style="right:-240px; top:-280px;"></div>
+    <div class="blob b3" style="left:880px; bottom:120px;"></div>
+    <div class="content left">
+      <div class="eyebrow"><span class="dot"></span>Web slides</div>
+      <h1>Web slides<br><span class='accent'>open right here</span></h1>
+      <p class="sub">HTML, images and PDFs in one place</p>
+    </div>
+    <div class="device"><img src="mockups/en/5.png" alt=""></div>
+  </section>
+
+  <script>
+    (function () {
+      var raw = location.hash.replace('#', '') || new URLSearchParams(location.search).get('slide');
+      if (!raw) return;
+      var target = document.querySelector('.slide[data-index="' + raw + '"]');
+      if (!target) return;
+      document.body.classList.add('export');
+      target.classList.add('active');
+    })();
+  </script>
+</body>
+</html>

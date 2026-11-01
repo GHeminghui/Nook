@@ -1,0 +1,54 @@
+{
+  "sourceLanguage": "zh-Hans",
+  "strings": {
+    "没有可保存的内容": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nothing to save"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "没有可保存的内容"
+          }
+        }
+      }
+    },
+    "正在存入知栈…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saving to KnowStack…"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在存入知栈…"
+          }
+        }
+      }
+    },
+    "已存入知栈": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saved to KnowStack"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已存入知栈"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

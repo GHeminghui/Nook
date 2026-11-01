@@ -5,7 +5,7 @@ enum LibraryStoreError: LocalizedError {
     case folderNotEmpty
 
     var errorDescription: String? {
-        "文件夹或其子文件夹内还有文件，无法删除"
+        String(localized: "文件夹或其子文件夹内还有文件，无法删除")
     }
 }
 

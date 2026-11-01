@@ -30,7 +30,7 @@ enum SharedInbox {
     }
 
     private static func unfiledFolder(in store: LibraryStore) throws -> Folder {
-        let name = "未分类"
+        let name = String(localized: "未分类")
         let descriptor = FetchDescriptor<Folder>(predicate: #Predicate { $0.name == name })
         if let existing = try store.context.fetch(descriptor).first {
             return existing
