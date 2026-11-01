@@ -3,50 +3,274 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>知栈 · KnowStack</title>
+<title>知栈 · 学习资料库</title>
+<meta name="description" content="知栈（KnowStack）是一款为老师和学生准备的 iPad 资料库：多级文件夹、标签、全文搜索，PDF 直接在系统预览里标注。">
+<meta property="og:title" content="知栈 · 学习资料库">
+<meta property="og:description" content="课件、试卷、错题、网页素材，一处归档。">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://gheminghui.github.io/Nook/assets/hero-zh.png">
+<meta property="og:url" content="https://gheminghui.github.io/Nook/">
+<link rel="canonical" href="https://gheminghui.github.io/Nook/">
 <style>
-  :root { --ink:#1d1f27; --muted:#5f6270; --paper:#fcfaf5; --card:#fff; --line:#e7e1d4; --indigo:#4c5cae; --coral:#ff6b4a; }
-  * { box-sizing:border-box; }
-  body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-system,"PingFang SC","Helvetica Neue",Arial,sans-serif; line-height:1.8; }
-  main { max-width:720px; margin:0 auto; padding:72px 24px 96px; }
-  .kicker { color:var(--muted); font-size:13px; letter-spacing:3px; }
-  h1 { font-size:40px; margin:10px 0 6px; letter-spacing:-0.6px; }
-  .rule { width:54px; height:4px; background:var(--coral); border-radius:2px; margin:18px 0 26px; }
-  p { color:#2b2e36; font-size:16px; }
-  .grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:28px; }
-  a.card { display:block; background:var(--card); border:1px solid var(--line); border-radius:16px; padding:20px 22px;
-           text-decoration:none; color:var(--ink); transition:transform .15s ease; }
-  a.card:hover { transform:translateY(-2px); }
-  a.card b { display:block; font-size:17px; margin-bottom:4px; }
-  a.card span { color:var(--muted); font-size:14px; }
-  .en { margin-top:64px; padding-top:32px; border-top:1px solid var(--line); }
-  footer { margin-top:48px; color:var(--muted); font-size:12px; }
-  @media (max-width:560px) { .grid { grid-template-columns:1fr; } h1 { font-size:32px; } }
+  :root {
+    --ink:#1d1f27; --muted:#5f6270; --line:#e7e1d4; --paper:#fcfaf5;
+    --card:#ffffff; --indigo:#4c5cae; --coral:#ff6b4a; --amber:#ffc24b;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin:0; background:var(--paper); color:var(--ink); line-height:1.75; overflow-x:hidden;
+    font-family:-apple-system,"PingFang SC","Helvetica Neue",Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  a { color:var(--indigo); text-decoration:none; }
+  .wrap { max-width:1120px; margin:0 auto; padding:0 24px; }
+
+  nav {
+    position:sticky; top:0; z-index:20;
+    background:rgba(252,250,245,.86); backdrop-filter:blur(14px);
+    border-bottom:1px solid rgba(231,225,212,.7);
+  }
+  .nav-inner { height:64px; display:flex; align-items:center; justify-content:space-between; }
+  .brand { display:flex; align-items:center; gap:10px; font-weight:700; font-size:19px; color:var(--ink); }
+  .brand .mark {
+    width:30px; height:30px; border-radius:9px; display:grid; place-items:center;
+    background:linear-gradient(150deg,#5b6cc4,#3f4c96); color:#fff; font-size:15px;
+    box-shadow:0 4px 10px rgba(76,92,174,.28);
+  }
+  .nav-links { display:flex; gap:22px; font-size:14px; }
+  .nav-links a { color:var(--muted); }
+  .nav-links a:hover { color:var(--ink); }
+  @media (max-width:640px) { .nav-links { display:none; } }
+
+  .hero {
+    display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.15fr); gap:48px; align-items:center;
+    padding:72px 0 48px;
+  }
+  .eyebrow {
+    display:inline-flex; align-items:center; gap:9px; padding:7px 14px; border-radius:999px;
+    background:rgba(76,92,174,.09); border:1px solid rgba(76,92,174,.16);
+    color:var(--indigo); font-size:13px; font-weight:600; letter-spacing:.06em;
+  }
+  .eyebrow i { width:7px; height:7px; border-radius:50%; background:var(--coral); }
+  h1 { font-size:58px; line-height:1.14; letter-spacing:-2px; margin:22px 0 0; }
+  h1 .accent { color:var(--coral); }
+  .lede { font-size:18px; color:var(--muted); margin:18px 0 0; max-width:440px; }
+  .cta { display:flex; align-items:center; gap:16px; margin-top:30px; flex-wrap:wrap; }
+  .pill {
+    display:inline-flex; align-items:center; gap:8px; padding:11px 18px; border-radius:12px;
+    background:#17191f; color:#fff; font-size:14px; font-weight:600;
+  }
+  .pill span { color:#b9bdc9; font-weight:400; }
+  .text-link { font-size:14px; font-weight:600; }
+  .hero-art { position:relative; }
+  .hero-art img { width:100%; display:block; filter:drop-shadow(0 30px 50px rgba(29,31,39,.18)); }
+  .glow {
+    position:absolute; inset:8% 6% 12% 6%; z-index:-1; border-radius:50%;
+    background:radial-gradient(circle at 55% 45%, rgba(76,92,174,.16), rgba(255,107,74,.08) 55%, transparent 72%);
+    filter:blur(20px);
+  }
+  @media (max-width:900px) {
+    .hero { grid-template-columns:1fr; gap:34px; padding:44px 0 30px; }
+    h1 { font-size:42px; letter-spacing:-1.4px; }
+    .hero-art { max-width:560px; margin:0 auto; }
+  }
+
+  .strip {
+    display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px;
+    border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+    padding:24px 0; margin:10px 0 0;
+  }
+  .stat, .feature, .gallery figure { min-width:0; }
+  .stat b { display:block; font-size:22px; letter-spacing:-.4px; }
+  .stat span { color:var(--muted); font-size:13px; }
+  @media (max-width:720px) {
+    .strip { grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px; }
+    .stat b { font-size:18px; }
+    .stat span { font-size:12px; }
+  }
+
+  section { padding:64px 0; }
+  .section-head { max-width:620px; margin-bottom:34px; }
+  .kicker { color:var(--coral); font-size:13px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; }
+  h2 { font-size:34px; letter-spacing:-1px; margin:8px 0 10px; }
+  .section-head p { color:var(--muted); margin:0; font-size:16px; }
+
+  .features { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .feature {
+    background:var(--card); border:1px solid var(--line); border-radius:18px; padding:24px;
+  }
+  .feature .icon {
+    width:38px; height:38px; border-radius:12px; display:grid; place-items:center;
+    background:rgba(76,92,174,.09); color:var(--indigo); margin-bottom:14px;
+    font-size:18px;
+  }
+  .feature h3 { font-size:16px; margin:0 0 6px; }
+  .feature p { margin:0; color:var(--muted); font-size:14px; line-height:1.7; }
+  @media (max-width:900px) { .features { grid-template-columns:1fr 1fr; } }
+  @media (max-width:580px) { .features { grid-template-columns:1fr; } }
+
+  .gallery { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+  .gallery figure { margin:0; background:var(--card); border:1px solid var(--line); border-radius:18px; overflow:hidden; }
+  .gallery img { width:100%; display:block; background:#fff; }
+  .gallery figcaption { padding:14px 16px 16px; font-size:13px; color:var(--muted); }
+  @media (max-width:900px) { .gallery { grid-template-columns:1fr; } }
+
+  .privacy-card {
+    background:linear-gradient(140deg,#f2f4fb,#fdf4ef 70%);
+    border:1px solid rgba(76,92,174,.14); border-radius:22px; padding:34px;
+    display:flex; gap:28px; align-items:center; justify-content:space-between; flex-wrap:wrap;
+  }
+  .privacy-card h2 { font-size:26px; margin:0 0 6px; }
+  .privacy-card p { margin:0; color:var(--muted); font-size:15px; max-width:640px; }
+
+  .en { border-top:1px solid var(--line); }
+  .en h2 { font-size:30px; }
+
+  footer { border-top:1px solid var(--line); padding:30px 0 44px; color:var(--muted); font-size:13px; }
+  .foot { display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+  .foot a { color:var(--muted); margin-left:18px; }
+  .foot a:hover { color:var(--ink); }
 </style>
 </head>
 <body>
-<main>
-  <div class="kicker">知栈</div>
-  <h1>知栈</h1>
-  <div class="rule"></div>
-  <p>课件、试卷、错题和网页素材，收进一个地方。多级文件夹、标签、全文搜索，PDF 直接在系统预览里标注。</p>
 
-  <div class="grid">
-    <a class="card" href="support.html"><b>支持与帮助</b><span>快速开始、常见问题、联系方式</span></a>
-    <a class="card" href="privacy.html"><b>隐私政策</b><span>不收集数据，资料保存在你的设备与 iCloud</span></a>
-  </div>
-
-  <div class="en">
-    <div class="kicker">KNOWSTACK</div>
-    <h1 style="font-size:30px">KnowStack</h1>
-    <p>Slides, exams, mistake logs and web pages in one place. Nested folders, tags, full-text search, and PDF markup with the system preview.</p>
-    <div class="grid">
-      <a class="card" href="support.html"><b>Support</b><span>Getting started, FAQ, contact</span></a>
-      <a class="card" href="privacy.html"><b>Privacy Policy</b><span>No data collected; files stay on your device and in your iCloud</span></a>
+<nav>
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top"><span class="mark">知</span>知栈</a>
+    <div class="nav-links">
+      <a href="#features">功能</a>
+      <a href="#screens">截图</a>
+      <a href="#english">English</a>
+      <a href="support.html">支持</a>
+      <a href="privacy.html">隐私</a>
     </div>
   </div>
+</nav>
 
-  <footer>© 2026 知栈 · KnowStack. All rights reserved.</footer>
+<main id="top">
+  <div class="wrap">
+    <div class="hero">
+      <div>
+        <div class="eyebrow"><i></i>为 iPad 打造的学习资料库 · 知栈</div>
+        <h1>所有学习资料<br><span class="accent">一处归档</span></h1>
+        <p class="lede">课件、试卷、错题、作文素材和网页课件，不必再散落在聊天记录、网盘和相册里。</p>
+        <div class="cta">
+          <span class="pill">App Store <span>即将上线</span></span>
+          <a class="text-link" href="#features">看看能做什么 →</a>
+        </div>
+      </div>
+      <div class="hero-art">
+        <div class="glow"></div>
+        <img src="assets/hero-zh.png" alt="知栈 App 界面">
+      </div>
+    </div>
+
+    <div class="strip">
+      <div class="stat"><b>多级文件夹</b><span>像电脑一样整理</span></div>
+      <div class="stat"><b>标签 + 全文搜索</b><span>按文件夹、标签、关键词筛选</span></div>
+      <div class="stat"><b>PDF 标注</b><span>系统预览，保存即生效</span></div>
+      <div class="stat"><b>中文 / English</b><span>界面跟随系统语言</span></div>
+    </div>
+
+    <section id="features">
+      <div class="section-head">
+        <div class="kicker">Features</div>
+        <h2>为资料整理而做，不为功能堆砌</h2>
+        <p>老师备课、学生整理错题、家长留存材料，都能在同一个资料库里完成。</p>
+      </div>
+      <div class="features">
+        <div class="feature">
+          <div class="icon">▤</div>
+          <h3>真实的文件夹层级</h3>
+          <p>多级子文件夹，新建、重命名、拖动排序；文件按真实目录保存，结构清晰可迁移。</p>
+        </div>
+        <div class="feature">
+          <div class="icon">◇</div>
+          <h3>标签与组合筛选</h3>
+          <p>一份资料多个标签，按「文件夹范围 + 标签 + 关键词」组合筛选，找东西不再靠翻。</p>
+        </div>
+        <div class="feature">
+          <div class="icon">⌕</div>
+          <h3>文件名 + 正文检索</h3>
+          <p>PDF 与 HTML 的正文会建立索引，输入关键词直接定位到内容，而不只是文件名。</p>
+        </div>
+        <div class="feature">
+          <div class="icon">✎</div>
+          <h3>PDF 系统标注</h3>
+          <p>点开即用系统预览，手写、形状、签名都能用；保存回原文件，不产生副本。</p>
+        </div>
+        <div class="feature">
+          <div class="icon">↗</div>
+          <h3>分享扩展收资料</h3>
+          <p>在其他 App 里通过系统分享面板直接存入知栈，回到 App 就能看到。</p>
+        </div>
+        <div class="feature">
+          <div class="icon">☁</div>
+          <h3>iCloud 与「文件」App</h3>
+          <p>资料以真实文件保存，可在「文件」App 中浏览；登录 iCloud 后多设备同步。</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="screens">
+      <div class="section-head">
+        <div class="kicker">Screens</div>
+        <h2>长什么样</h2>
+        <p>真实界面，不是概念图。</p>
+      </div>
+      <div class="gallery">
+        <figure><img src="assets/shot-folder.png" alt="文件夹层级"><figcaption>文件夹层级：数学 / 高一 / 函数</figcaption></figure>
+        <figure><img src="assets/shot-pdf.png" alt="PDF 标注"><figcaption>PDF 用系统预览打开，直接标注</figcaption></figure>
+        <figure><img src="assets/shot-web.png" alt="网页课件"><figcaption>网页课件、图片、PDF 都能直接看</figcaption></figure>
+      </div>
+    </section>
+
+    <section>
+      <div class="privacy-card">
+        <div>
+          <div class="kicker">Privacy</div>
+          <h2>不收集数据</h2>
+          <p>没有账号、没有广告、没有第三方统计 SDK。资料保存在你的设备或你自己的 iCloud Drive，开发者无法访问。</p>
+        </div>
+        <a class="text-link" href="privacy.html">读隐私政策 →</a>
+      </div>
+    </section>
+
+    <section id="english" class="en">
+      <div class="section-head">
+        <div class="kicker">KnowStack</div>
+        <h2>A quieter place for study materials</h2>
+        <p>Nested folders, tags, full-text search and PDF markup — built for iPad.</p>
+      </div>
+      <div class="hero" style="padding:10px 0 30px;">
+        <div>
+          <h1 style="font-size:40px;">All your study<br><span class="accent">materials, together</span></h1>
+          <p class="lede">Slides, exams, mistake logs and web pages — organized in one library, not scattered across chats and cloud drives.</p>
+          <div class="cta">
+            <span class="pill">App Store <span>coming soon</span></span>
+            <a class="text-link" href="support.html">Support →</a>
+          </div>
+        </div>
+        <div class="hero-art">
+          <div class="glow"></div>
+          <img src="assets/hero-en.png" alt="KnowStack app">
+        </div>
+      </div>
+    </section>
+  </div>
 </main>
+
+<footer>
+  <div class="wrap foot">
+    <div>© 2026 知栈 · KnowStack</div>
+    <div>
+      <a href="support.html">支持 / Support</a>
+      <a href="privacy.html">隐私 / Privacy</a>
+      <a href="mailto:minghuihe2022@163.com">邮件</a>
+    </div>
+  </div>
+</footer>
+
 </body>
 </html>
