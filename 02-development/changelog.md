@@ -1,5 +1,12 @@
 # 开发日志（Changelog）
 
+## 2026-11-03 · App Review 2.1 补件准备
+
+- 审核要求提供物理设备录屏与 6 项说明；本次不涉及代码修复
+- 新增 `03-operations/app-review-response.md`（英文 Notes 模板 + 录屏脚本）
+- 新增审核示例文件：`review/samples.zip`（PDF / HTML / PNG）
+- 计划补件后重新提交同一构建 `1.0 (1)`；若改代码则构建号 +1
+
 ## 2026-11-02 · v1.0.0 (1) 提交 App Store 审核
 
 - 归档构建 `1.0 (1)` 并提交 App Store 审核（状态：Waiting for Review）

@@ -8,7 +8,7 @@
 | 构建号 | `1` |
 | Git tag | `v1.0.0`（commit `982824f`） |
 | 提交审核 | 2026-11-02 |
-| 当前状态 | **已提交审核，等待审核结果**（尚未公开上架） |
+| 当前状态 | **2026-11-03 收到 Guideline 2.1 补件要求**；补录屏与说明后重新提交同一构建（尚未上架） |
 | 支持设备 | iPad（iPadOS 17+） |
 | 价格 | 免费 |
 | Bundle ID | `com.hmh.nook` |
@@ -84,6 +84,12 @@
 - iPad only; no iPhone version.
 
 ---
+
+## 2026-11-03 · App Review 2.1 补件
+
+- 苹果要求：真机屏幕录制 + 6 项说明（用途/受众、设置步骤、外部服务、地区差异、监管/第三方素材）。
+- 处理：未改代码；已准备 [App Review 补件说明](app-review-response.md)、录制脚本与[示例文件](https://gheminghui.github.io/Nook/review/samples.zip)。
+- 下一步：录制真机视频 → 粘贴 Notes → 重新提交 `1.0 (1)`。
 
 ## 审核通过与上线后要做的验证
 
