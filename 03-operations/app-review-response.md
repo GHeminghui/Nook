@@ -76,7 +76,7 @@ iPad 控制中心 → 屏幕录制（可不开麦克风）→ 回到主屏幕 �
 
 ## 4. App Review Information · Notes（直接粘贴）
 
-> 把 `https://youtu.be/awjgCb8sCG4`、`[iPad model]`、`[iPadOS version]` 换成实际值；其余可以原样使用。
+> 录屏链接已填入；把 `[iPad model]`、`[iPadOS version]` 换成实际值，其余可以原样使用。
 
 ```
 Hello App Review Team,
@@ -86,9 +86,7 @@ Thank you for the Guideline 2.1 request. Below is the requested information for 
 1) Screen recording (physical iPad, latest iPadOS)
 https://youtu.be/awjgCb8sCG4
 
-The recording starts by tapping the app icon and shows the typical flow: launch, create nested folders, import a PDF/HTML/PNG, add tags, search and filter, open and mark up a PDF in the system preview, render an HTML slide, and save a file through the share extension.
-
-The recording shows, in order: launching the app and the empty library; creating the Math / Grade 10 / Functions folders; importing the sample PDF, HTML and PNG; adding the Key and Review tags; search and tag filtering; PDF markup in the system preview; HTML preview; and saving a file through the share extension.
+The recording starts by tapping the app icon and shows, in order: launch and the empty library; creating the Math / Grade 10 / Functions folders; importing the sample PDF, HTML and PNG; adding the Key and Review tags; search and tag filtering; PDF markup in the system preview; HTML preview; and saving a file through the share extension.
 
 2) Purpose and audience
 KnowStack is a local-first study materials library for iPad. It is built for teachers, students and parents. The problem: lesson slides, exams, mistake logs and web pages are scattered across chats, cloud drives and photo albums. The value: nested folders, tags, full-text search, system PDF markup and a share extension keep materials organized and findable.
@@ -135,7 +133,7 @@ No account or demo credentials are required. Please let us know if anything else
 - [ ] 录屏是在物理 iPad 上录的，从点图标启动开始
 - [ ] 录屏链接在无痕窗口可打开，不需要登录
 - [ ] 示例文件链接可下载：https://gheminghui.github.io/Nook/review/samples.zip
-- [ ] Notes 里 6 项都有，且没有 `https://youtu.be/awjgCb8sCG4` 这类占位符
+- [ ] Notes 里 6 项都有，且没有 `[RECORDING URL]`、`[iPad model]` 这类占位符
 - [ ] 明确写了「无账号 / 无内购 / 无社交 UGC / 无第三方 SDK」
 - [ ] 真机完整走一遍：启动 → 导入 → 标签 → 搜索 → PDF 标注 → HTML → 分享扩展
 - [ ] 如果代码有改动，构建号已 +1 并重新上传；只改 Notes 则不用新构建
