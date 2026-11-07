@@ -88,7 +88,7 @@ Thank you for the Guideline 2.1 request. Below is the requested information for 
 
 The recording starts by tapping the app icon and shows the typical flow: launch, create nested folders, import a PDF/HTML/PNG, add tags, search and filter, open and mark up a PDF in the system preview, render an HTML slide, and save a file through the share extension.
 
-Chapters: 00:00 launch; 00:20 folders; 00:40 import; 01:00 tags; 01:35 search; 01:55 PDF markup; 02:30 HTML preview; 02:45 share extension.
+The recording shows, in order: launching the app and the empty library; creating the Math / Grade 10 / Functions folders; importing the sample PDF, HTML and PNG; adding the Key and Review tags; search and tag filtering; PDF markup in the system preview; HTML preview; and saving a file through the share extension.
 
 2) Purpose and audience
 KnowStack is a local-first study materials library for iPad. It is built for teachers, students and parents. The problem: lesson slides, exams, mistake logs and web pages are scattered across chats, cloud drives and photo albums. The value: nested folders, tags, full-text search, system PDF markup and a share extension keep materials organized and findable.
