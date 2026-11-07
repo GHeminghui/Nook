@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>审核演示文件 · 知栈 / KnowStack</title>
+<style>
+  :root { --ink:#1d1f27; --muted:#5f6270; --paper:#fcfaf5; --card:#fff; --line:#e7e1d4; --indigo:#4c5cae; --coral:#ff6b4a; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--paper); color:var(--ink); font-family:-apple-system,"PingFang SC","Helvetica Neue",Arial,sans-serif; line-height:1.75; }
+  main { max-width:760px; margin:0 auto; padding:48px 24px 80px; }
+  .kicker { color:var(--muted); font-size:13px; letter-spacing:2px; }
+  h1 { font-size:32px; margin:8px 0 8px; letter-spacing:-.5px; }
+  .rule { width:52px; height:4px; background:var(--coral); border-radius:2px; margin:16px 0 26px; }
+  p { color:#2b2e36; font-size:15px; }
+  .big { display:block; text-align:center; background:var(--ink); color:#fff; padding:16px; border-radius:14px; font-weight:600; text-decoration:none; margin:24px 0 10px; }
+  .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:18px 0 28px; }
+  .card { display:block; background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px; text-decoration:none; color:var(--ink); }
+  .card b { display:block; font-size:15px; margin-bottom:4px; }
+  .card span { color:var(--muted); font-size:12px; }
+  .steps { background:#fff; border:1px solid var(--line); border-radius:16px; padding:20px 22px; margin:24px 0; }
+  .steps ol { margin:8px 0 0; padding-left:20px; }
+  .steps li { margin:6px 0; font-size:15px; }
+  .note { color:var(--muted); font-size:13px; margin-top:26px; }
+  footer { margin-top:40px; color:var(--muted); font-size:12px; }
+  @media (max-width:560px) { .grid { grid-template-columns:1fr; } h1 { font-size:26px; } }
+</style>
+</head>
+<body>
+<main>
+  <div class="kicker">APP REVIEW SAMPLES</div>
+  <h1>审核演示文件</h1>
+  <div class="rule"></div>
+  <p>这些是给 App Review 演示用的合成文件，不包含真实学生信息。包含 PDF、HTML、PNG 三种格式。</p>
+
+  <a class="big" href="samples.zip" download>下载全部（samples.zip）</a>
+
+  <div class="grid">
+    <a class="card" href="sample-functions.pdf" download><b>PDF</b><span>19 KB · 文字版学习笔记</span></a>
+    <a class="card" href="sample-web-slide.html" download><b>HTML</b><span>1.3 KB · 网页课件</span></a>
+    <a class="card" href="sample-image.png" download><b>PNG</b><span>26 KB · 页面图片</span></a>
+  </div>
+
+  <div class="steps">
+    <strong>在 iPad 上导入</strong>
+    <ol>
+      <li>点上面的「下载全部」，Safari 会存到「文件」App 的「下载」。</li>
+      <li>打开「文件」App → 下载 → 长按 <code>samples.zip</code> → 解压。</li>
+      <li>打开知栈 / KnowStack → 右上角「导入 / Import」→ 选三个文件。</li>
+      <li>如果只想单独下载，点下面的 PDF / HTML / PNG 按钮。</li>
+    </ol>
+  </div>
+
+  <p class="note">录屏时建议把三个文件都导入，分别展示 PDF 标注、HTML 渲染和图片预览。文件内容为英文，方便审核员阅读。</p>
+  <footer>© 2026 知栈 · KnowStack</footer>
+</main>
+</body>
+</html>
